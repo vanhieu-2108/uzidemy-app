@@ -41,6 +41,7 @@ view_count: number
 created_at: Date
 updated_at: Date
 _destroy: boolean
+chapters: ObjectId[]
 benefits: string[]
 requirements: string[]
 faq: ObjectId[]
@@ -49,49 +50,69 @@ faq: ObjectId[]
 ## FAQ
 
 ```ts
-_id: ObjectId
-course_id: ObjectId
 question: string
 answer: string
+```
+
+## Chapters
+
+```ts
+_id: ObjectId
+title: string
+course_id: ObjectId
+lectures: ObjectId[]
 created_at: Date
 updated_at: Date
+_destroy: boolean
 ```
 
 ## Lectures
 
 ```ts
 _id: ObjectId
+slug: string
 title: string
+video_url: string
+content: string
+chapter_id: ObjectId
 course_id: ObjectId
-lessons: string[]
+quiz_id: ObjectId
 created_at: Date
 updated_at: Date
 _destroy: boolean
 ```
 
-## Lessons
+## Quizzes
 
 ```ts
 _id: ObjectId
-title: string
-video_url: string
-content: string
 lecture_id: ObjectId
-course_id: ObjectId
+questions: [
+  {
+    question: string
+    options: [
+      {
+        answer: string
+        is_correct: boolean
+      }
+    ]
+  }
+]
 created_at: Date
 updated_at: Date
-_destroy: boolean
 ```
 
 ## Orders
 
 ```ts
 _id: ObjectId
+order_id: number
 user_id: ObjectId
 course_id: ObjectId
 price: number
-status: string
+status: 'SUCCESS' | 'PENDING' | 'FAILED'
 created_at: Date
+updated_at: Date
 _destroy: boolean
 ```
 
@@ -100,8 +121,11 @@ _destroy: boolean
 ```ts
 _id: ObjectId
 user_id: ObjectId
-course_id: ObjectId
+parent_id: ObjectId | null
+object_id: ObjectId
+object_type: 'LECTURE' | 'POST'
 content: string
+_destroy: boolean
 created_at: Date
 updated_at: Date
 ```
@@ -124,17 +148,4 @@ user_id: ObjectId
 course_id: ObjectId
 lesson_id: ObjectId
 created_at: Date
-```
-
-## Coupons
-
-```ts
-_id: ObjectId
-code: string // Mã coupon này phải là duy nhất
-discount: number
-valid_from: Date
-valid_until: Date
-user_id: null | ObjectId // Nếu null thì là coupon cho tất cả user còn không thì là coupon cho user đó
-created_at: Date
-updated_at: Date
 ```

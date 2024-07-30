@@ -3,7 +3,6 @@ import { ObjectId } from 'mongodb'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { ErrorWithStatus } from '~/model/Errors'
 import databaseService from '~/services/database.services'
-import usersServices from '~/services/users.services'
 import validate from '~/utils/validation'
 
 export const createCourseValidator = validate(

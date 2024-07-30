@@ -42,9 +42,11 @@ class CoursesController {
     res: Response,
     next: NextFunction
   ) {
+    const { slug } = req.params
+    const result = await coursesServices.getCourseBySlug(slug)
     return res.json({
       message: 'Lấy thông tin khóa học thành công',
-      result: req.course
+      result
     })
   }
 }

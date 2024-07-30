@@ -18,8 +18,7 @@ interface ICourse {
   description: string
   original_price: number
   sale_price: number
-  lectures?: ObjectId[]
-  lessons?: ObjectId[]
+  chapters?: ObjectId[]
   image?: string
   view_count?: number
   benefits?: string[]
@@ -36,7 +35,7 @@ export default class Course {
   description: string
   original_price: number
   sale_price: number
-  lectures?: ObjectId[]
+  chapters?: ObjectId[]
   image?: string
   view_count?: number
   benefits?: string[]
@@ -53,7 +52,7 @@ export default class Course {
     image,
     original_price,
     sale_price,
-    lectures,
+    chapters,
     view_count,
     created_at,
     updated_at,
@@ -69,7 +68,7 @@ export default class Course {
     this.description = description
     this.original_price = original_price
     this.sale_price = sale_price
-    this.lectures = lectures || []
+    this.chapters = chapters || []
     this.image = image || ''
     this.view_count = view_count || 0
     this.benefits = benefits || []

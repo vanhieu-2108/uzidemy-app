@@ -1,5 +1,5 @@
 import { ObjectId, WithId } from 'mongodb'
-import { CreateLectureReqBody } from '~/model/requests/Lesson.requests'
+import { CreateLectureReqBody } from '~/model/requests/Lecture.requests'
 import Lecture from '~/model/schemas/Lecture.schema'
 import databaseService from '~/services/database.services'
 

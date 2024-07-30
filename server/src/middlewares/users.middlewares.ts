@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
-import { checkSchema } from 'express-validator'
+import { checkSchema, ParamSchema } from 'express-validator'
 import { JsonWebTokenError } from 'jsonwebtoken'
-import { WithId } from 'mongodb'
+import { ObjectId, WithId } from 'mongodb'
 import { ERole } from '~/constants/enums'
 import HTTP_STATUS from '~/constants/httpStatus'
 import { ErrorWithStatus } from '~/model/Errors'
@@ -12,6 +12,84 @@ import usersServices from '~/services/users.services'
 import envConfig from '~/utils/config'
 import { verifyPassword, verifyToken } from '~/utils/utils'
 import validate from '~/utils/validation'
+
+const passwordSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: 'Mật khẩu không được để trống'
+  },
+  isLength: {
+    options: {
+      min: 6,
+      max: 100
+    },
+    errorMessage: 'Mật khẩu phải từ 6 đến 100 ký tự'
+  }
+}
+
+const confirmPasswordSchema: ParamSchema = {
+  notEmpty: {
+    errorMessage: 'Nhập lại mật khẩu không được để trống'
+  },
+  isLength: {
+    options: {
+      min: 6,
+      max: 100
+    },
+    errorMessage: 'Nhập lại mật khẩu phải từ 6 đến 100 ký tự'
+  },
+  custom: {
+    options: (value, { req }) => {
+      if (value !== req.body.password) {
+        throw new Error('Mật khẩu nhập lại không khớp')
+      }
+      return true
+    }
+  }
+}
+
+const forgotPasswordTokenSchema: ParamSchema = {
+  trim: true,
+  custom: {
+    options: async (value, { req }) => {
+      if (!value) {
+        throw new ErrorWithStatus({
+          message: 'Forgot password token là bắt buộc',
+          status: HTTP_STATUS.UNAUTHORIZED
+        })
+      }
+      try {
+        const decoded_forgot_password_token = await verifyToken({
+          token: value,
+          privateKey: envConfig.forgotPasswordSecret
+        })
+        const { user_id } = decoded_forgot_password_token
+        const findUser = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+        if (!findUser) {
+          throw new ErrorWithStatus({
+            message: 'Người dùng không tồn tại',
+            status: HTTP_STATUS.NOT_FOUND
+          })
+        }
+        if (value !== findUser.forgot_password_token) {
+          throw new ErrorWithStatus({
+            message: 'Forgot password token không đúng',
+            status: HTTP_STATUS.UNAUTHORIZED
+          })
+        }
+        req.decoded_forgot_password_token = decoded_forgot_password_token
+      } catch (error) {
+        if (error instanceof JsonWebTokenError) {
+          throw new ErrorWithStatus({
+            message: error.message,
+            status: HTTP_STATUS.UNAUTHORIZED
+          })
+        }
+        throw error
+      }
+      return true
+    }
+  }
+}
 
 export const registerValidator = validate(
   checkSchema(
@@ -45,42 +123,58 @@ export const registerValidator = validate(
           errorMessage: 'Họ tên phải từ 6 đến 50 ký tự'
         }
       },
-      password: {
-        notEmpty: {
-          errorMessage: 'Mật khẩu không được để trống'
-        },
-        isLength: {
-          options: {
-            min: 6,
-            max: 100
-          },
-          errorMessage: 'Mật khẩu phải từ 6 đến 100 ký tự'
-        }
-      },
-      confirm_password: {
-        notEmpty: {
-          errorMessage: 'Nhập lại mật khẩu không được để trống'
-        },
-        isLength: {
-          options: {
-            min: 6,
-            max: 100
-          },
-          errorMessage: 'Nhập lại mật khẩu phải từ 6 đến 100 ký tự'
-        },
-        custom: {
-          options: (value, { req }) => {
-            if (value !== req.body.password) {
-              throw new Error('Mật khẩu nhập lại không khớp')
-            }
-            return true
-          }
-        }
-      }
+      password: passwordSchema,
+      confirm_password: confirmPasswordSchema
     },
     ['body']
   )
 )
+
+export const verifyEmailValidator = validate(
+  checkSchema({
+    email_verify_token: {
+      trim: true,
+      custom: {
+        options: async (value, { req }) => {
+          if (!value) {
+            throw new ErrorWithStatus({
+              message: 'Email verify token là bắt buộc',
+              status: HTTP_STATUS.UNAUTHORIZED
+            })
+          }
+          try {
+            const decoded_email_verify_token = await verifyToken({
+              token: value,
+              privateKey: envConfig.emailSecret
+            })
+            const { user_id } = decoded_email_verify_token
+            const findUser = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+            if (!findUser) {
+              throw new ErrorWithStatus({
+                message: 'Người dùng không tồn tại',
+                status: HTTP_STATUS.NOT_FOUND
+              })
+            }
+            if (value !== findUser.email_verify_token) {
+              throw new ErrorWithStatus({
+                message: 'Email verify token không đúng',
+                status: HTTP_STATUS.UNAUTHORIZED
+              })
+            }
+            ;(req as Request).decoded_email_verify_token = decoded_email_verify_token
+          } catch (error) {
+            throw new ErrorWithStatus({
+              message: (error as JsonWebTokenError).message,
+              status: HTTP_STATUS.UNAUTHORIZED
+            })
+          }
+          return true
+        }
+      }
+    }
+  })
+)
+
 export const loginValidator = validate(
   checkSchema(
     {
@@ -343,5 +437,54 @@ export const isIdSchemaMongoDB = validate(
       }
     },
     ['params']
+  )
+)
+
+export const fotgotPasswordValidator = validate(
+  checkSchema(
+    {
+      email: {
+        notEmpty: {
+          errorMessage: 'Email không được để trống'
+        },
+        isEmail: {
+          errorMessage: 'Email không đúng định dạng'
+        },
+        custom: {
+          options: async (value, { req }) => {
+            const findUser = await usersServices.findUserByEmail(value)
+            if (!findUser) {
+              throw new ErrorWithStatus({
+                message: 'Email không tồn tại',
+                status: HTTP_STATUS.NOT_FOUND
+              })
+            }
+            req.user = findUser
+            return true
+          }
+        }
+      }
+    },
+    ['body']
+  )
+)
+
+export const verifyForgotPasswordValidator = validate(
+  checkSchema(
+    {
+      forgot_password_token: forgotPasswordTokenSchema
+    },
+    ['body']
+  )
+)
+
+export const resetPasswordValidator = validate(
+  checkSchema(
+    {
+      password: passwordSchema,
+      confirm_password: confirmPasswordSchema,
+      forgot_password_token: forgotPasswordTokenSchema
+    },
+    ['body']
   )
 )

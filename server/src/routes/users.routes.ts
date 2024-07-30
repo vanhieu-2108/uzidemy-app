@@ -4,12 +4,16 @@ import { wrapHandler } from '~/utils/wrapHandler'
 import {
   accessTokenValidator,
   changePasswordValidator,
+  fotgotPasswordValidator,
   isAdminValidator,
   isIdSchemaMongoDB,
   loginValidator,
   refreshTokenValidator,
   registerValidator,
-  updateMeValidator
+  resetPasswordValidator,
+  updateMeValidator,
+  verifyEmailValidator,
+  verifyForgotPasswordValidator
 } from '~/middlewares/users.middlewares'
 const usersRouter = Router()
 /**
@@ -23,6 +27,27 @@ const usersRouter = Router()
  * }
  */
 usersRouter.post('/register', registerValidator, wrapHandler(usersController.register))
+
+/**
+ * Route verify email
+ * [POST]: /users/verify-email
+ * body: {
+ * email_verify_token: string
+ * }
+ */
+
+usersRouter.post('/verify-email', verifyEmailValidator, wrapHandler(usersController.verifyEmail))
+
+/**
+ * Route gửi lại email xác nhận
+ * [POST]: /users/resend-verify-email
+ * headers: {
+ * Authorization: `Bearer <accessToken>`
+ * }
+ */
+
+usersRouter.post('/resend-verify-email', accessTokenValidator, wrapHandler(usersController.resendVerifyEmail))
+
 /**
  * Route đăng nhập
  * [POST]: /users/login
@@ -73,6 +98,39 @@ usersRouter.post(
   changePasswordValidator,
   wrapHandler(usersController.changePassword)
 )
+
+/**
+ * Route gửi email đổi mật khẩu
+ * [POST]: /users/forgot-password
+ * body: {
+ * email: string
+ * }
+ */
+usersRouter.post('/forgot-password', fotgotPasswordValidator, wrapHandler(usersController.forgotPassword))
+
+/**
+ * Route xác nhận email đổi mật khẩu
+ * [POST]: /users/verify-forgot-password
+ */
+
+usersRouter.post(
+  '/verify-forgot-password',
+  verifyForgotPasswordValidator,
+  wrapHandler(usersController.verifyForgotPassword)
+)
+
+/**
+ * Route đặt lại mật khẩu
+ * [POST]: /users/reset-password
+ * body: {
+ * new_password: string,
+ * confirm_new_password: string
+ * forgot_password_token: string
+ * }
+ */
+
+usersRouter.post('/reset-password', resetPasswordValidator, wrapHandler(usersController.resetPassword))
+
 /**
  * Route lấy tất cả người dùng
  * [GET]: /users

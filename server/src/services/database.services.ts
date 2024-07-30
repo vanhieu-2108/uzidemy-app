@@ -1,10 +1,16 @@
 import { Collection, Db, MongoClient } from 'mongodb'
+import Chapter from '~/model/schemas/Chapter.schema'
+import Comment from '~/model/schemas/Comment.schema'
+import Course from '~/model/schemas/Course.schema'
+import Lecture from '~/model/schemas/Lecture.schema'
+import Order from '~/model/schemas/Order.schema'
+import Quiz from '~/model/schemas/Quiz.schema'
 import RefreshToken from '~/model/schemas/RefreshToken.schema'
 import User from '~/model/schemas/User.schema'
 import envConfig from '~/utils/config'
 const uri = `mongodb+srv://${envConfig.dbUsername}:${envConfig.dbPassword}@ucademy.h8csv5s.mongodb.net/?retryWrites=true&w=majority&appName=Ucademy`
 class DatabaseService {
-  private client: MongoClient
+  client: MongoClient
   private db: Db
   constructor() {
     this.client = new MongoClient(uri)
@@ -19,7 +25,31 @@ class DatabaseService {
   }
 
   get refreshTokens(): Collection<RefreshToken> {
-    return this.db.collection(envConfig.dbRefreshToken)
+    return this.db.collection(envConfig.dbCollectionRefreshToken)
+  }
+
+  get courses(): Collection<Course> {
+    return this.db.collection(envConfig.dbCollectionCourses)
+  }
+
+  get chapters(): Collection<Chapter> {
+    return this.db.collection(envConfig.dbCollectionChapters)
+  }
+
+  get lectures(): Collection<Lecture> {
+    return this.db.collection(envConfig.dbCollectionLectures)
+  }
+
+  get orders(): Collection<Order> {
+    return this.db.collection(envConfig.dbCollectionOrders)
+  }
+
+  get quizzes(): Collection<Quiz> {
+    return this.db.collection(envConfig.dbCollectionQuizzes)
+  }
+
+  get comments(): Collection<Comment> {
+    return this.db.collection(envConfig.dbCollectionComments)
   }
 }
 

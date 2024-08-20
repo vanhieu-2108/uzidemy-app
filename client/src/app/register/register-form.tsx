@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
+
 const formSchema = z
   .object({
     email: z.string().email("Email không hợp lệ"),
@@ -23,6 +24,7 @@ const formSchema = z
       });
     }
   });
+
 export default function RegisterForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -32,64 +34,102 @@ export default function RegisterForm() {
       confirm_password: "",
     },
   });
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
   }
+
   return (
-    <div className="w-[min(100%,600px)] mx-auto py-10 border borderGray p-10 mt-10 rounded-md">
-      <h1 className="text-center mb-10 font-bold text-2xl">Đăng Ký</h1>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input placeholder="Enter your email..." {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Mật khẩu</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="Enter your password..." {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="confirm_password"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Nhập lại mật khẩu</FormLabel>
-                <FormControl>
-                  <Input type="password" placeholder="Enter your confirm password..." {...field} />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <p className="text-sm text-center">
+    <div className="flex items-center justify-center min-h-screen bg-gray-300">
+      <div className="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0">
+        <div className="flex flex-col justify-center p-8 md:p-14">
+          <span className="mp-3 text-4xl font-bold text-black">Đăng Ký</span>
+          <span className="font-light text-gray-400 mb-8">
+            Nếu bạn chưa có tài khoản vui lòng đăng ký
+          </span>
+
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-5">
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-black">Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        placeholder="Enter your email..."
+                        {...field}
+                        className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-black">Mật khẩu</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Enter your password..."
+                        {...field}
+                        className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="confirm_password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel className="text-black">Nhập lại mật khẩu</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        placeholder="Enter your confirm password..."
+                        {...field}
+                        className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <Button
+                type="submit"
+                className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:bg-gray-300"
+              >
+                Đăng Ký
+              </Button>
+            </form>
+          </Form>
+
+          <div className="text-center text-gray-400">
             Bạn đã có tài khoản?
-            <Link href="/login" className="ml-2 text-primary font-medium">
+            <Link href="/login" className="ml-2 text-black font-bold">
               Đăng nhập
             </Link>
-          </p>
-          <Button type="submit" className="w-full textGray">
-            Đăng Ký
-          </Button>
-        </form>
-      </Form>
+          </div>
+        </div>
+        <div className="relative">
+          <img
+            src="https://plus.unsplash.com/premium_photo-1663091635973-dd5b3bb9f442?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+            alt="img"
+            className="w-[400px] h-full hidden rounded-r-2xl md:block object-cover"
+          />
+        </div>
+      </div>
     </div>
   );
 }

@@ -48,7 +48,7 @@ export default function BlogPage() {
       <span className="text-xs text-gray-500">4 phút đọc</span>
     </div>
   </div>
-  <div className="w-2/5"> {/* Điều chỉnh chiều rộng tại đây */}
+  <div className="w-5/10"> {/* Điều chỉnh chiều rộng tại đây */}
     <img src="https://via.placeholder.com/150" alt="Minh hoạ" className="w-full h-full object-cover" />
   </div>
 </div>

@@ -46,8 +46,7 @@ const envConfig = {
   ses_from_address: process.env.SES_FROM_ADDRESS,
   payosCLientId: process.env.PAYOS_CLIENT_ID as string,
   payosApiKey: process.env.PAYOS_API_KEY as string,
-  payosChecksumKey: process.env.PAYOS_CHECKSUM_KEY as string,
-  sentryDSN: process.env.SENTRY_DSN as string
+  payosChecksumKey: process.env.PAYOS_CHECKSUM_KEY as string
 }
 
 export default envConfig

@@ -98,67 +98,6 @@ coursesRouter.get('', getAllCoursesValidator, wrapHandler(coursesController.getA
  * }
  */
 
-// coursesRouter.get('/test', async (req: Request, res: Response) => {
-//   const result = await databaseService.courses
-//     .aggregate([
-//       {
-//         $match: {
-//           slug: 'khoa-hoc-js-co-ban2' // Lọc tài liệu dựa trên slug
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: 'chapters',
-//           localField: '_id',
-//           foreignField: 'course_id',
-//           as: 'chapter_list' // Kết hợp thông tin từ bảng `chapters` vào mảng `chapter_list`
-//         }
-//       },
-//       {
-//         $unwind: {
-//           path: '$chapter_list',
-//           preserveNullAndEmptyArrays: true // Giữ các tài liệu không có `chapter_list`
-//         }
-//       },
-//       {
-//         $lookup: {
-//           from: 'lectures',
-//           localField: 'chapter_list.lectures', // Trường chứa ID bài giảng trong `chapter_list`
-//           foreignField: '_id', // Trường trong bảng `lectures` chứa ID bài giảng
-//           as: 'chapter_list.lecture_list' // Tạo mảng mới `lecture_list` trong từng chương
-//         }
-//       },
-//       {
-//         $unset: ['chapter_list.lectures', 'chapters']
-//       },
-//       {
-//         $group: {
-//           _id: '$_id', // Nhóm theo ID của khóa học
-//           slug: { $first: '$slug' },
-//           title: { $first: '$title' },
-//           description: { $first: '$description' },
-//           original_price: { $first: '$original_price' },
-//           sale_price: { $first: '$sale_price' },
-//           chapters: { $first: '$chapters' },
-//           image: { $first: '$image' },
-//           view_count: { $first: '$view_count' },
-//           benefits: { $first: '$benefits' },
-//           requirements: { $first: '$requirements' },
-//           faqs: { $first: '$faqs' },
-//           created_at: { $first: '$created_at' },
-//           updated_at: { $first: '$updated_at' },
-//           status: { $first: '$status' },
-//           chapter_list: { $push: '$chapter_list' } // Chuyển đổi từ đối tượng thành mảng
-//         }
-//       }
-//     ])
-//     .toArray()
-//   res.json({
-//     message: 'Test',
-//     result
-//   })
-// })
-
 coursesRouter.get('/:slug', getCourseValidator, wrapHandler(coursesController.getCourseBySlug))
 
 export default coursesRouter

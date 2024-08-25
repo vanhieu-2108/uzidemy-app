@@ -132,6 +132,13 @@ class UsersController {
     const result = await usersServices.resetPassword(user_id, password)
     return res.json(result)
   }
+
+  async getMe(req: Request, res: Response, next: NextFunction) {
+    console.log('123')
+    const { user_id } = req.decoded_access_token as TokenPayload
+    const result = await usersServices.getMe(user_id)
+    return res.json(result)
+  }
 }
 const usersController = new UsersController()
 export default usersController

@@ -15,8 +15,9 @@ import commentsRouter from '~/routes/comments.routes'
 import helmet from 'helmet'
 import { rateLimit } from 'express-rate-limit'
 import compression from 'compression'
+import envConfig from '~/utils/config'
 const app = express()
-const port = process.env.PORT
+const port = envConfig.port
 app.use(
   cors({
     origin: '*'

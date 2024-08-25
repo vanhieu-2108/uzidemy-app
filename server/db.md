@@ -11,6 +11,7 @@ courses: string[]
 role: string
 created_at: Date
 updated_at: Date
+forgot_password_token: string
 email_verify_token: string
 _destroy: boolean // Thay vì xóa user thì đánh dấu _destroy = true để không ảnh hưởng đến dữ liệu tương tự như các bảng khác
 ```

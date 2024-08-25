@@ -1,5 +1,6 @@
 import { ObjectId } from 'mongodb'
 import { ERole } from '~/constants/enums'
+import { ErrorWithStatus } from '~/model/Errors'
 import { ChangePasswordReqBody, RegisterReqBody, UpdateMeReqBody } from '~/model/requests/User.requests'
 import RefreshToken from '~/model/schemas/RefreshToken.schema'
 import User, { EVerifyUser, IUser } from '~/model/schemas/User.schema'
@@ -268,6 +269,25 @@ class UsersServices {
     return {
       message: 'Đặt lại mật khẩu thành công'
     }
+  }
+  async getMe(user_id: string) {
+    const user = await databaseService.users.findOne(
+      { _id: new ObjectId(user_id) },
+      {
+        projection: {
+          password: 0,
+          email_verify_token: 0,
+          forgot_password_token: 0
+        }
+      }
+    )
+    if (!user) {
+      throw new ErrorWithStatus({
+        message: 'Người dùng không tồn tại',
+        status: 404
+      })
+    }
+    return user
   }
 }
 const usersServices = new UsersServices()

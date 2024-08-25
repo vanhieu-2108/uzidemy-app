@@ -1,4 +1,6 @@
 import { ObjectId, WithId } from 'mongodb'
+import HTTP_STATUS from '~/constants/httpStatus'
+import { ErrorWithStatus } from '~/model/Errors'
 import { CreateLectureReqBody } from '~/model/requests/Lecture.requests'
 import Lecture from '~/model/schemas/Lecture.schema'
 import databaseService from '~/services/database.services'
@@ -120,6 +122,19 @@ class LecturesService {
     }
     return {
       message: 'Thay đổi trạng thái bài học thành công'
+    }
+  }
+  async getLecture(lecture_id: string) {
+    const findLecture = await databaseService.lectures.findOne({ _id: new ObjectId(lecture_id) })
+    if (!findLecture) {
+      throw new ErrorWithStatus({
+        message: 'Không tìm thấy bài học',
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    return {
+      message: 'Lấy thông tin bài học thành công',
+      result: findLecture
     }
   }
 }

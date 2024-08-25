@@ -53,4 +53,11 @@ lecturesRouter.put('/delete/:lecture_id', accessTokenValidator, deleteLessonVali
 
 lecturesRouter.put('/status/:lecture_id', accessTokenValidator, changeStatusValidator, lecturesController.changeStatus)
 
+/**
+ * Route lấy thông tin một bài học
+ * [GET]: /lectures/:lecture_id
+ */
+
+lecturesRouter.get('/:lecture_id', accessTokenValidator, lecturesController.getLecture)
+
 export default lecturesRouter

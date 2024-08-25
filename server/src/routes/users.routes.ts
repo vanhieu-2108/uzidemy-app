@@ -140,6 +140,14 @@ usersRouter.post('/reset-password', resetPasswordValidator, wrapHandler(usersCon
  * }
  */
 usersRouter.get('/', accessTokenValidator, isAdminValidator, wrapHandler(usersController.getAllUsers))
+
+/**
+ * Route lấy thông tin người dùng hiện tại
+ * [GET]: /users/me
+ */
+
+usersRouter.get('/me', accessTokenValidator, wrapHandler(usersController.getMe))
+
 /**
  * Route lấy thông tin người dùng
  * [GET]: /users/:user_id

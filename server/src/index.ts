@@ -16,6 +16,7 @@ import helmet from 'helmet'
 import { rateLimit } from 'express-rate-limit'
 import compression from 'compression'
 import envConfig from '~/utils/config'
+import postsRouter from '~/routes/posts.routes'
 const app = express()
 const port = envConfig.port
 app.use(
@@ -55,6 +56,7 @@ app.use('/static', staticRouter)
 app.use('/payment', paymentRouter)
 app.use('/quizzes', quizzesRouter)
 app.use('/comments', commentsRouter)
+app.use('/posts', postsRouter)
 // Error handler xử lý tất cả các lỗi trong ứng dụng
 app.use(defaultErrorHandler)
 // Khởi động server

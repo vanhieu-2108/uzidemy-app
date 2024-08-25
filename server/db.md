@@ -150,3 +150,17 @@ course_id: ObjectId
 lesson_id: ObjectId
 created_at: Date
 ```
+
+## Posts
+
+```ts
+_id: ObjectId
+user_id: ObjectId
+title: string
+content: string
+author: string
+image: string
+created_at: Date
+updated_at: Date
+_destroy: boolean
+```

@@ -8,8 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import Image from "next/image";
-import banner from '../../../public/img1.avif'
-
+import banner from "../../../public/img1.avif";
 
 const formSchema = z
   .object({
@@ -47,9 +46,7 @@ export default function RegisterForm() {
       <div className="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0">
         <div className="flex flex-col justify-center p-8 md:p-14">
           <span className="mp-3 text-4xl font-bold text-black">Đăng Ký</span>
-          <span className="font-light text-gray-400 mb-8">
-            Nếu bạn chưa có tài khoản vui lòng đăng ký
-          </span>
+          <span className="font-light text-gray-400 mb-8">Nếu bạn chưa có tài khoản vui lòng đăng ký</span>
 
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-5">
@@ -126,11 +123,7 @@ export default function RegisterForm() {
           </div>
         </div>
         <div className="relative">
-          <Image
-        src={banner}
-            alt="img"
-            className="w-[400px] h-full hidden rounded-r-2xl md:block object-cover"
-          />
+          <Image src={banner} alt="img" className="w-[400px] h-full hidden rounded-r-2xl md:block object-cover" />
         </div>
       </div>
     </div>

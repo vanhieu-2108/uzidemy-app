@@ -52,7 +52,7 @@ export default function Page() {
               </div>
               <span className="text-red-500 text-lg font-bold">499.000</span>
             </div>
-            <Link href={`/details/`}>
+            <Link href="/course">
               <button className="mt-4 w-full bg-blue-500 text-white py-2 rounded text-lg font-bold">
                 Xem chi tiết
               </button>

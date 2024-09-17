@@ -1,9 +1,4 @@
-import {
-  getAccessTokenFromLocalStorage,
-  removeTokensFromLocalStorage,
-  setAccessTokenToLocalStorage,
-  setRefreshTokenToLocalStorage,
-} from "@/lib/utils";
+import { getAccessTokenFromLocalStorage, removeTokensFromLocalStorage } from "@/lib/utils";
 import { redirect } from "next/navigation";
 const ENTITY_ERROR_STATUS = 422;
 const AUTHENTICATION_ERROR_STATUS = 401;
@@ -14,9 +9,11 @@ type CusTomOptions = Omit<RequestInit, "method"> & {
 type EntityErrorPayload = {
   message: string;
   errors: {
-    path: string;
-    msg: string;
-  }[];
+    [key: string]: {
+      path: string;
+      msg: string;
+    };
+  };
 };
 
 export class HttpError extends Error {
@@ -67,7 +64,7 @@ const request = async <Response>(
   }
   // Nếu không truyền baseURL (hoặc baseURL === undefined) thì sẽ lấy từ envConfig.NEXT_PUBLIC_API_ENDPOINT
   // Nếu truyền baseUrl thì lấy giá trị truyền vào, truyền vào '' thì đồng nghĩa với việc chúng ta gọi API đến Next.js Server
-  const baseURL = options?.baseURL === undefined ? "localhost:4000" : options.baseURL;
+  const baseURL = options?.baseURL === undefined ? "http://localhost:4000" : options.baseURL;
   const fullURL = `${baseURL}${url}`;
   const res = await fetch(fullURL, {
     ...options,

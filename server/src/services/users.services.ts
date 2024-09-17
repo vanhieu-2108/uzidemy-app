@@ -24,7 +24,6 @@ class UsersServices {
         email_verify_token
       })
     )
-    await sendEmailVerfiy(data.email, email_verify_token)
     return result
   }
   async login(user: IUser) {

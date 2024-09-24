@@ -1,13 +1,14 @@
 "use client";
 import { menuItems } from "@/constants/menuItems";
 import { cn } from "@/lib/utils";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 export default function Sidebar() {
   const path = usePathname();
   return (
     <>
-      <div className="p-5 border borderGray h-screen hidden lg:block sticky top-0 left-0">
+      <div className={`${cn("p-5 border borderGray h-screen hidden lg:block sticky top-0 left-0")}`}>
         <Link href="/">
           <span className="text-3xl font-bold text-primary">U</span>
           <span className="text-2xl font-bold">zidemy</span>

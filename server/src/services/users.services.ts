@@ -49,8 +49,8 @@ class UsersServices {
         fullname: user.fullname,
         role: user.role,
         avatar: user.avatar,
-        createdAt: user.created_at,
-        updatedAt: user.updated_at,
+        created_at: user.created_at,
+        updated_at: user.updated_at,
         verify: user.verify
       }
     }

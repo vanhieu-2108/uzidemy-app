@@ -2,21 +2,31 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import React from "react";
+import React, { useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import Image from "next/image";
-import banner from '../../../public/img1.avif'
+import banner from "../../../public/img1.avif";
+import { useLogin } from "@/queries/useAccount";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { setAccessTokenToLocalStorage, setRefreshTokenToLocalStorage } from "@/lib/utils";
+import { AppProviderContext } from "@/components/app-provider";
+import { EntityError } from "@/lib/http";
 
 const formSchema = z.object({
   email: z.string().email("Email không hợp lệ"),
   password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
 });
 
+type FormData = z.infer<typeof formSchema>;
+
 export default function LoginForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const { setUser } = useContext(AppProviderContext);
+  const router = useRouter();
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
@@ -24,8 +34,34 @@ export default function LoginForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  const loginMutation = useLogin();
+
+  async function onSubmit(values: FormData) {
+    loginMutation.mutateAsync(values, {
+      onSuccess: (data) => {
+        const { access_token, refresh_token, account } = data.payload.result;
+        localStorage.setItem("user", JSON.stringify(account));
+        setUser(account);
+        setAccessTokenToLocalStorage(access_token);
+        setRefreshTokenToLocalStorage(refresh_token);
+        toast.success("Đăng nhập thành công");
+        router.push("/");
+      },
+      onError: (error) => {
+        if (error instanceof EntityError) {
+          const errors = error.payload.errors;
+          for (const key in errors) {
+            form.setError(key as keyof FormData, {
+              type: "server",
+              message: errors[key].msg,
+            });
+          }
+          return;
+        }
+        toast.error(error.message);
+        throw error;
+      },
+    });
   }
 
   return (
@@ -91,11 +127,7 @@ export default function LoginForm() {
           </div>
         </div>
         <div className="relative ">
-          <Image 
-            src={banner}
-            alt="img"
-            className="w-[400px] h-full hidden rounded-r-2xl md:block object-cover "
-          />
+          <Image src={banner} alt="img" className="w-[400px] h-full hidden rounded-r-2xl md:block object-cover " />
         </div>
       </div>
     </div>

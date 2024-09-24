@@ -6,3 +6,8 @@ export const useRegister = () => {
     mutationFn: (body: any) => authApiRequest.register(body),
   });
 };
+export const useLogin = () => {
+  return useMutation({
+    mutationFn: (body: any) => authApiRequest.login(body),
+  });
+}

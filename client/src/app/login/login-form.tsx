@@ -2,31 +2,65 @@
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import React from "react";
+import React, { useContext } from "react";
 import { Button } from "@/components/ui/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import Image from "next/image";
 import banner from '../../../public/img1.avif'
+import { useLogin } from "@/queries/useAccount";
+import { setAccessTokenToLocalStorage, setRefreshTokenToLocalStorage } from "@/lib/utils";
+import { toast } from "react-toastify";
+import { EntityError } from "@/lib/http";
+import { useRouter } from "next/navigation";
+import { AppProviderContext } from "@/components/app-provider";
 
 const formSchema = z.object({
   email: z.string().email("Email không hợp lệ"),
   password: z.string().min(6, "Mật khẩu phải có ít nhất 6 ký tự"),
 });
+type FormData = z.infer<typeof formSchema>;
 
 export default function LoginForm() {
-  const form = useForm<z.infer<typeof formSchema>>({
+  const { setUser } = useContext(AppProviderContext);
+  const router = useRouter()
+  const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
-
+  const loginMutation = useLogin();
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-  }
+    loginMutation.mutate(values, {
+      onSuccess: (data) => {
+        const { access_token, refresh_token, account } = data.payload.result;
+        localStorage.setItem("user", JSON.stringify(account));
+        setUser(account);
+        setAccessTokenToLocalStorage(access_token);
+        setRefreshTokenToLocalStorage(refresh_token);
+        toast.success("Đăng nhập thành công");
+        router.push("/");
+      },
+      onError: (error) => {
+        if (error instanceof EntityError) {
+          const errors = error.payload.errors;
+          for (const key in errors) {
+            form.setError(key as keyof FormData, {
+              type: "server",
+              message: errors[key].msg,
+            });
+          }
+          return;
+        }
+        toast.error(error.message);
+        throw error;
+      },
+  })
+}
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-300">

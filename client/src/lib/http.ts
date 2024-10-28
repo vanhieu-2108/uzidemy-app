@@ -1,4 +1,9 @@
-import { getAccessTokenFromLocalStorage, removeTokensFromLocalStorage } from "@/lib/utils";
+import {
+  getAccessTokenFromLocalStorage,
+  removeTokensFromLocalStorage,
+  setAccessTokenToLocalStorage,
+  setRefreshTokenToLocalStorage,
+} from "@/lib/utils";
 import { redirect } from "next/navigation";
 const ENTITY_ERROR_STATUS = 422;
 const AUTHENTICATION_ERROR_STATUS = 401;
@@ -120,17 +125,17 @@ const request = async <Response>(
       throw new HttpError(data);
     }
   }
-  // Đảm bảo logic dưới đây chỉ chạy ở client
-  //   if (isClient) {
-  //     const nomarlizeUrl = normalizePath(url);
-  //     if (nomarlizeUrl === "api/auth/login") {
-  //       const { accessToken, refreshToken } = payload.data as any;
-  //       setAccessTokenToLocalStorage(accessToken);
-  //       setRefreshTokenToLocalStorage(refreshToken);
-  //     } else if (nomarlizeUrl === "api/auth/logout") {
-  //       removeTokensFromLocalStorage();
-  //     }
+  // //  Đảm bảo logic dưới đây chỉ chạy ở client
+  // if (isClient) {
+  //   // const nomarlizeUrl = normalizePath(url);
+  //   if (nomarlizeUrl === "api/auth/login") {
+  //     const { accessToken, refreshToken } = payload.data as any;
+  //     setAccessTokenToLocalStorage(accessToken);
+  //     setRefreshTokenToLocalStorage(refreshToken);
+  //   } else if (nomarlizeUrl === "api/auth/logout") {
+  //     removeTokensFromLocalStorage();
   //   }
+  // }
   return data;
 };
 

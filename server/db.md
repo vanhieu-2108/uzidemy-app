@@ -45,14 +45,7 @@ _destroy: boolean
 chapters: ObjectId[]
 benefits: string[]
 requirements: string[]
-faq: ObjectId[]
-```
-
-## FAQ
-
-```ts
-question: string
-answer: string
+faq: string[]
 ```
 
 ## Chapters
@@ -148,6 +141,7 @@ _id: ObjectId
 user_id: ObjectId
 course_id: ObjectId
 lesson_id: ObjectId
+status: 'COMPLETED' | 'IN_PROGRESS'
 created_at: Date
 ```
 

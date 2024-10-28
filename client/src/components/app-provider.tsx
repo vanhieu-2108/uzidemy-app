@@ -5,7 +5,7 @@ import { ToastContainer } from "react-toastify";
 import React, { useState, createContext, useContext, useEffect } from "react";
 import type { Account } from "@/types/auth";
 import "react-toastify/dist/ReactToastify.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import RefreshToken from "@/components/refresh-token";
 
 // Định nghĩa kiểu dữ liệu cho context
 interface AppProviderContextProps {
@@ -24,7 +24,6 @@ export const useAppProvider = () => useContext(AppProviderContext);
 
 export default function AppProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<Account | undefined>(undefined);
-
   // Sử dụng useEffect để lấy dữ liệu từ localStorage
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -46,6 +45,7 @@ export default function AppProvider({ children }: { children: React.ReactNode })
     <QueryClientProvider client={queryClient}>
       <AppProviderContext.Provider value={{ user, setUser }}>
         {children}
+        <RefreshToken />
         <ToastContainer />
         <ReactQueryDevtools initialIsOpen={false} />
       </AppProviderContext.Provider>

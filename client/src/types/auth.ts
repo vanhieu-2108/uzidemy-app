@@ -1,4 +1,5 @@
-import { ROLE } from '@/constants/enum';
+import { ROLE } from "@/constants/enum";
+import { Response } from "@/types/res";
 
 export interface Account {
   _id: string;
@@ -15,4 +16,8 @@ export interface ResponseLogin {
   access_token: string;
   refresh_token: string;
   account: Account;
+}
+
+export interface ResponseLogout {
+  message: string;
 }

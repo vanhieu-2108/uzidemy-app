@@ -8,7 +8,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import Image from "next/image";
-import banner from "../../../public/img1.avif";
+import banner from "../../../../public/img1.avif";
 import { useRegister } from "@/queries/useAccount";
 import { EntityError } from "@/lib/http";
 import { toast } from "react-toastify";
@@ -160,7 +160,7 @@ export default function RegisterForm() {
 
               <Button
                 type="submit"
-                className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:bg-gray-300"
+                className="w-full bg-black text-white p-2 rounded-lg mb-6  hover:text-black hover:border hover:bg-gray-300"
               >
                 Đăng Ký
               </Button>

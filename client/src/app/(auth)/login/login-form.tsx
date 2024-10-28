@@ -1,20 +1,20 @@
 "use client";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
+import banner from "../../../../public/img1.avif";
+import Image from "next/image";
+import Link from "next/link";
 import React, { useContext } from "react";
+import { AppProviderContext } from "@/components/app-provider";
 import { Button } from "@/components/ui/button";
+import { EntityError } from "@/lib/http";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import Link from "next/link";
-import Image from "next/image";
-import banner from '../../../public/img1.avif'
-import { useLogin } from "@/queries/useAccount";
 import { setAccessTokenToLocalStorage, setRefreshTokenToLocalStorage } from "@/lib/utils";
 import { toast } from "react-toastify";
-import { EntityError } from "@/lib/http";
+import { useForm } from "react-hook-form";
+import { useLogin } from "@/queries/useAccount";
 import { useRouter } from "next/navigation";
-import { AppProviderContext } from "@/components/app-provider";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 const formSchema = z.object({
   email: z.string().email("Email không hợp lệ"),
@@ -24,7 +24,7 @@ type FormData = z.infer<typeof formSchema>;
 
 export default function LoginForm() {
   const { setUser } = useContext(AppProviderContext);
-  const router = useRouter()
+  const router = useRouter();
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -34,7 +34,6 @@ export default function LoginForm() {
   });
   const loginMutation = useLogin();
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
     loginMutation.mutate(values, {
       onSuccess: (data) => {
         const { access_token, refresh_token, account } = data.payload.result;
@@ -59,8 +58,8 @@ export default function LoginForm() {
         toast.error(error.message);
         throw error;
       },
-  })
-}
+    });
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-300">
@@ -125,11 +124,7 @@ export default function LoginForm() {
           </div>
         </div>
         <div className="relative ">
-          <Image 
-            src={banner}
-            alt="img"
-            className="w-[400px] h-full hidden rounded-r-2xl md:block object-cover "
-          />
+          <Image src={banner} alt="img" className="w-[400px] h-full hidden rounded-r-2xl md:block object-cover " />
         </div>
       </div>
     </div>

@@ -14,9 +14,28 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 import Link from "next/link";
 import { useContext } from "react";
+import { useLogout } from "@/queries/useAccount";
+import { toast } from "react-toastify";
+import { removeTokensFromLocalStorage } from "@/lib/utils";
 
 export default function Header() {
-  const { user } = useContext(AppProviderContext);
+  const { user, setUser } = useContext(AppProviderContext);
+
+  const logoutMutation = useLogout();
+
+  const handleLogout = async () => {
+    const refresh_token = localStorage.getItem("refresh_token");
+    await logoutMutation.mutateAsync(
+      { refresh_token },
+      {
+        onSuccess: (data) => {
+          console.log("data", data);
+          setUser(undefined);
+          removeTokensFromLocalStorage();
+        },
+      }
+    );
+  };
 
   return (
     <div className="py-3 sticky top-0 left-0 flex items-center gap-5 justify-between mb-10">
@@ -46,7 +65,7 @@ export default function Header() {
               <DropdownMenuLabel>{user.fullname}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Hồ sơ</DropdownMenuItem>
-              <DropdownMenuItem>Đăng xuất</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleLogout}>Đăng xuất</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ) : (

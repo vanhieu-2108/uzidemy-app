@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button"; 
+import { Button } from "@/components/ui/button";
 
 export default function Page() {
   return (
@@ -13,9 +13,7 @@ export default function Page() {
             className="w-full h-48 object-cover"
           />
           <div className="p-4">
-            <h3 className="font-semibold text-2xl">
-              Minh hoạ vector bằng Adobe Illustrator cùng Rachelizmarvel
-            </h3>
+            <h3 className="font-semibold text-2xl">Minh hoạ vector bằng Adobe Illustrator cùng Rachelizmarvel</h3>
             <div className="flex justify-between items-center mt-2">
               <div className="flex items-center">
                 <span className="text-gray-500 text-lg flex items-center mr-4 font-bold">
@@ -52,9 +50,7 @@ export default function Page() {
               </div>
             </div>
             <Link href="/course">
-              <Button className="mt-4 w-full bg-blue-500 text-white py-2 rounded text-lg font-bold">
-                Xem bài học
-              </Button>
+              <Button className="mt-4 w-full bg-blue-500 text-white py-2 rounded text-lg font-bold">Xem bài học</Button>
             </Link>
           </div>
         </div>

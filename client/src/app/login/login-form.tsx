@@ -8,7 +8,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import Image from "next/image";
-import banner from '../../../public/img1.avif'
+import banner from '../../../public/img1.avif';
+
 import { useLogin } from "@/queries/useAccount";
 import { setAccessTokenToLocalStorage, setRefreshTokenToLocalStorage } from "@/lib/utils";
 import { toast } from "react-toastify";
@@ -24,7 +25,7 @@ type FormData = z.infer<typeof formSchema>;
 
 export default function LoginForm() {
   const { setUser } = useContext(AppProviderContext);
-  const router = useRouter()
+  const router = useRouter();
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -33,6 +34,7 @@ export default function LoginForm() {
     },
   });
   const loginMutation = useLogin();
+
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     loginMutation.mutate(values, {
@@ -59,13 +61,33 @@ export default function LoginForm() {
         toast.error(error.message);
         throw error;
       },
-  })
-}
+    });
+  }
+
+  function closeForm() {
+    router.push("/"); 
+  }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-300">
+    <div className="flex items-center justify-center min-h-screen ">
       <div className="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0">
+        {/* Nút Close */}
+        <button
+          onClick={closeForm}
+          className="absolute top-3 left-3 text-black font-bold "
+        >
+          &#x2715; {/* Icon Close */}
+        </button>
+
+       
         <div className="flex flex-col justify-center p-8 md:p-14">
+       
+          <div className="mb-4 " >
+            <Link href="/">
+              <span className="text-3xl font-bold text-primary">U</span>
+              <span className="text-2xl font-bold">zidemy</span>
+            </Link>
+          </div>
           <span className="mp-3 text-4xl font-bold text-black">Đăng Nhập</span>
           <span className="font-light text-gray-400 mb-8">Vui lòng đăng nhập vào tài khoản của bạn</span>
 
@@ -124,11 +146,12 @@ export default function LoginForm() {
             </Link>
           </div>
         </div>
-        <div className="relative ">
-          <Image 
+
+        <div className="relative">
+          <Image
             src={banner}
             alt="img"
-            className="w-[400px] h-full hidden rounded-r-2xl md:block object-cover "
+            className="w-[400px] h-full hidden rounded-r-2xl md:block object-cover"
           />
         </div>
       </div>

@@ -69,11 +69,27 @@ export default function RegisterForm() {
       },
     });
   }
+  function closeForm() {
+    router.push("/"); 
+  }
+
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-gray-300">
       <div className="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0">
         <div className="flex flex-col justify-center p-8 md:p-14">
+        <button
+          onClick={closeForm}
+          className="absolute top-3 left-3 text-black font-bold "
+        >
+          &#x2715; {/* Icon Close */}
+        </button>
+          <div className="mb-4 " >
+              <Link href="/">
+                <span className="text-3xl font-bold text-primary">U</span>
+                <span className="text-2xl font-bold">zidemy</span>
+              </Link>
+          </div>
           <span className="mp-3 text-4xl font-bold text-black">Đăng Ký</span>
           <span className="font-light text-gray-400 mb-8">Nếu bạn chưa có tài khoản vui lòng đăng ký</span>
 

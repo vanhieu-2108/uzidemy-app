@@ -94,3 +94,153 @@
     }
   }
 }
+
+.content {
+  @apply text-gray-200;
+
+  /* Headings */
+  h1 {
+    @apply text-2xl font-bold mb-4 mt-8 text-gray-800;
+  }
+
+  h2 {
+    @apply text-xl font-bold mb-3 mt-6 text-gray-800;
+  }
+
+  h3 {
+    @apply text-xl font-bold mb-3 mt-6 text-gray-800;
+  }
+
+  h4 {
+    @apply text-lg font-bold mb-2 mt-4 text-gray-800;
+  }
+
+  /* Paragraphs and spacing */
+  p {
+    @apply mb-4 leading-relaxed text-gray-600;
+  }
+
+  /* Lists */
+  ul,
+  ol {
+    @apply mb-4 ml-4;
+  }
+
+  ul {
+    @apply list-disc;
+  }
+
+  ol {
+    @apply list-decimal;
+  }
+
+  li {
+    @apply mb-2 text-gray-500;
+  }
+
+  /* Nested lists */
+  li > ul,
+  li > ol {
+    @apply mt-2 mb-2 ml-4;
+  }
+
+  /* Links */
+  a {
+    @apply text-blue-400 hover:text-blue-300 underline;
+  }
+
+  /* Blockquotes */
+  blockquote {
+    @apply border-l-4 border-gray-500 pl-4 py-2 mb-4 italic bg-gray-800 rounded;
+  }
+
+  /* Code blocks */
+  pre {
+    @apply bg-gray-800 rounded-lg p-4 mb-4 overflow-x-auto;
+  }
+
+  code {
+    @apply bg-gray-700 px-1 py-0.5 rounded text-sm font-mono;
+  }
+
+  pre code {
+    @apply bg-transparent p-0 text-sm block;
+  }
+
+  /* Tables */
+  table {
+    @apply w-full mb-4 border-collapse;
+  }
+
+  th {
+    @apply bg-gray-800 border border-gray-600 px-4 py-2 text-left;
+  }
+
+  td {
+    @apply border border-gray-600 px-4 py-2;
+  }
+
+  /* Images */
+  img {
+    @apply max-w-full h-auto rounded-lg mb-4;
+  }
+
+  /* Horizontal rule */
+  hr {
+    @apply my-8 border-gray-600;
+  }
+
+  /* Strong and emphasis */
+  strong {
+    @apply font-bold text-gray-800;
+  }
+
+  em {
+    @apply italic;
+  }
+
+  /* Definition lists */
+  dl {
+    @apply mb-4;
+  }
+
+  dt {
+    @apply font-bold text-white mb-1;
+  }
+
+  dd {
+    @apply ml-4 mb-4;
+  }
+
+  /* Custom markers for nested lists */
+  ul ul {
+    list-style-type: circle;
+  }
+
+  ul ul ul {
+    list-style-type: square;
+  }
+
+  code {
+    @apply text-white;
+  }
+
+  /* Adjustments for small screens */
+  @media (max-width: 640px) {
+    h1 {
+      @apply text-2xl;
+    }
+
+    h2 {
+      @apply text-xl;
+    }
+
+    h3 {
+      @apply text-lg;
+    }
+
+    h4 {
+      @apply text-base;
+    }
+  }
+}

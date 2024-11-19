@@ -8,15 +8,17 @@ class CourseServices {
     return result
   }
   async update(course_id: string, data: any) {
+    if (!ObjectId.isValid(course_id)) {
+      throw new Error('course_id không hợp lệ')
+    }
+    const { _id, ...updateData } = data
     const result = await databaseService.courses.findOneAndUpdate(
       {
         _id: new ObjectId(course_id)
       },
       {
-        $set: data,
-        $currentDate: {
-          updated_at: true
-        }
+        $set: updateData,
+        $currentDate: { updated_at: true }
       },
       {
         returnDocument: 'after'
@@ -45,7 +47,12 @@ class CourseServices {
     const limit = Number(query?.limit) || 10
     const [result, total_page] = await Promise.all([
       await databaseService.courses
-        .find()
+        .find({
+          status: ECourseStatus.ACTIVE
+        })
+        .sort({
+          created_at: -1
+        })
         .skip((page - 1) * limit)
         .limit(limit)
         .toArray(),
@@ -60,6 +67,31 @@ class CourseServices {
       }
     }
   }
+
+  async getAllByAdmin(query?: { page: number; limit: number }) {
+    const page = Number(query?.page) || 1
+    const limit = Number(query?.limit) || 10
+    const [result, total_page] = await Promise.all([
+      await databaseService.courses
+        .find()
+        .sort({
+          created_at: -1
+        })
+        .skip((page - 1) * limit)
+        .limit(limit)
+        .toArray(),
+      Math.ceil((await databaseService.courses.countDocuments()) / limit)
+    ])
+    return {
+      data: result,
+      pagination: {
+        page,
+        limit,
+        total_page
+      }
+    }
+  }
+
   async getCourseById(course_id: string) {
     const result = await databaseService.courses.findOne({
       _id: new ObjectId(course_id)

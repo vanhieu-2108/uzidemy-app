@@ -79,7 +79,7 @@ export const createCourseValidator = validate(
         custom: {
           options: (value) => {
             if (value) {
-              const regex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/
+              const regex = /(http(s)?:\/\/[a-zA-Z0-9.-]+(:\d+)?(\/[a-zA-Z0-9._-]+)*)\.(jpg|gif|png)/
               if (!regex.test(value)) throw new Error('Đường dẫn ảnh không hợp lệ')
             }
             return true
@@ -209,7 +209,7 @@ export const updateCourseValidator = validate(
         custom: {
           options: (value) => {
             if (value) {
-              const regex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/
+              const regex = /(http(s)?:\/\/[a-zA-Z0-9.-]+(:\d+)?(\/[a-zA-Z0-9._-]+)*)\.(jpg|gif|png)/
               if (!regex.test(value)) throw new Error('Đường dẫn ảnh không hợp lệ')
             }
             return true
@@ -233,7 +233,7 @@ export const updateCourseValidator = validate(
         },
         custom: {
           options: (value) => {
-            if (value) {
+            if (value && Array.isArray(value)) {
               const isValid = value.every((item: string) => typeof item === 'string')
               if (!isValid) throw new Error('Lợi ích không hợp lệ')
             }
@@ -248,7 +248,7 @@ export const updateCourseValidator = validate(
         },
         custom: {
           options: (value) => {
-            if (value) {
+            if (value && Array.isArray(value)) {
               const isValid = value.every((item: string) => typeof item === 'string')
               if (!isValid) throw new Error('Yêu cầu không hợp lệ')
             }
@@ -260,6 +260,22 @@ export const updateCourseValidator = validate(
         optional: true,
         isArray: {
           errorMessage: 'FAQs phải là mảng'
+        },
+        custom: {
+          options: (value) => {
+            if (value && Array.isArray(value)) {
+              // Kiểm tra các câu hỏi và câu trả lời trong mảng
+              value.forEach((faq: any) => {
+                if (typeof faq.question !== 'string') {
+                  throw new Error('Câu hỏi phải là chuỗi')
+                }
+                if (typeof faq.answer !== 'string') {
+                  throw new Error('Câu trả lời phải là chuỗi')
+                }
+              })
+            }
+            return true
+          }
         }
       },
       'faqs.*.question': {

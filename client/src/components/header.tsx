@@ -1,6 +1,6 @@
 "use client";
 import { AppProviderContext } from "@/components/app-provider";
-import { IconSearch, IconUser } from "@/components/icons";
+import { IconSearch } from "@/components/icons";
 import { ModeToggle } from "@/components/mode-toggle";
 import {
   DropdownMenu,
@@ -15,8 +15,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import { useContext } from "react";
 import { useLogout } from "@/queries/useAccount";
-import { toast } from "react-toastify";
 import { removeTokensFromLocalStorage } from "@/lib/utils";
+import IconUser from "@/components/icons/icon-user";
 
 export default function Header() {
   const { user, setUser } = useContext(AppProviderContext);
@@ -29,7 +29,6 @@ export default function Header() {
       { refresh_token },
       {
         onSuccess: (data) => {
-          console.log("data", data);
           setUser(undefined);
           removeTokensFromLocalStorage();
         },
@@ -38,7 +37,7 @@ export default function Header() {
   };
 
   return (
-    <div className="py-3 sticky top-0 left-0 flex items-center gap-5 justify-between mb-10">
+    <div className="py-3 sticky top-0 left-0 flex items-center gap-5 justify-between bg-white z-10">
       <div className="hidden sm:flex w-[min(100%,390px)] textGray h-10 rounded-full border borderGray px-4 items-center">
         <input type="text" placeholder="Search..." className="flex-grow pr-4" />
         <button className="flex-shrink-0">
@@ -52,7 +51,6 @@ export default function Header() {
         </Link>
       </div>
       <div className="flex items-center gap-4">
-        <ModeToggle />
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger>

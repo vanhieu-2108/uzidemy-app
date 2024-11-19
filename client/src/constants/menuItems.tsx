@@ -1,5 +1,4 @@
-import { IconBlog, IconBook, IconPlay, IconProfile } from "@/components/icons";
-
+import { IconBlog, IconBook, IconBookNote, IconPlay, IconProfile } from "@/components/icons";
 export const menuItems = [
   {
     url: "/",
@@ -25,17 +24,11 @@ export const menuItems = [
     icon: <IconBlog className="size-5" />,
     isPublic: true,
   },
-  // {
-  //   url: "/manage/member",
-  //   title: "Quản lý thành viên",
-  //   isAdmin: true,
-  // },
-  // {
-  //   url: "/manage/order",
-  //   title: "Quản lý đơn hàng",
-  // },
-  // {
-  //   url: "/manage/comment",
-  //   title: "Quản lý bình luận",
-  // },
+  {
+    url: "/manage/courses",
+    title: "Quản lý khóa học",
+    isPublic: false,
+    icon: <IconBookNote className="size-5" />,
+    isAdmin: true,
+  },
 ];

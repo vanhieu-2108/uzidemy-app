@@ -49,3 +49,10 @@ export const checkAndRefreshToken = async (param?: { onError?: () => void; onSuc
     }
   }
 };
+
+export const formatPriceToVND = (price: number) => {
+  return new Intl.NumberFormat("vi-VN", {
+    style: "currency",
+    currency: "VND",
+  }).format(price);
+};

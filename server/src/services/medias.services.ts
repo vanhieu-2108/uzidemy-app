@@ -22,7 +22,7 @@ class MediasService {
         const newFullFileName = `${newFileName + '1'}.jpg`
         const newPath = path.resolve(UPLOAD_IMAGES_DIR, newFullFileName)
         sharp.cache(false)
-        await sharp(file.filepath).jpeg({ quality: 80 }).toFile(newPath)
+        await sharp(file.filepath).jpeg({ quality: 100 }).toFile(newPath)
         fs.unlinkSync(file.filepath)
         return {
           url: `${envConfig.host}/static/images/${newFullFileName}`,

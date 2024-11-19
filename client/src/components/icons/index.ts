@@ -3,4 +3,7 @@ export { default as IconBook } from "./icon-book";
 export { default as IconProfile } from "./icon-profile";
 export { default as IconSearch } from "./icon-search";
 export { default as IconBlog } from "./icon-blog";
-export { default as IconUser } from "./icon-user";
+export { default as IconEye } from "./icon-eye";
+export { default as IconPen } from "./icon-pen";
+export { default as IconBookNote } from "./icon-book-type";
+export { default as IconTrash } from "./icon-trash";

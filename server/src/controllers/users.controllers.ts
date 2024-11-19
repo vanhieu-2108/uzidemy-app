@@ -75,8 +75,8 @@ class UsersController {
   }
   async refreshToken(req: Request, res: Response, next: NextFunction) {
     const { refresh_token } = req.body
-    const { user_id, exp } = req.decoded_refresh_token as TokenPayload
-    const result = await usersServices.refreshToken(user_id, refresh_token, exp)
+    const { user_id, exp, role } = req.decoded_refresh_token as TokenPayload
+    const result = await usersServices.refreshToken(user_id, refresh_token, exp, role)
     return res.json({
       message: 'Refresh token thành công',
       result

@@ -35,6 +35,15 @@ class CoursesController {
       result
     })
   }
+
+  async getAllByAdmin(req: Request, res: Response, next: NextFunction) {
+    const result = await coursesServices.getAllByAdmin(req.query as any)
+    return res.json({
+      message: 'Lấy danh sách khóa học thành công',
+      result
+    })
+  }
+
   async getCourseBySlug(
     req: Request<{
       slug: string

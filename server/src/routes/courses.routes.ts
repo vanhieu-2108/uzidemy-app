@@ -1,5 +1,4 @@
-import { Request, Response, Router } from 'express'
-import { ObjectId } from 'mongodb'
+import { Router } from 'express'
 import coursesController from '~/controllers/courses.controllers'
 import {
   createCourseValidator,
@@ -9,7 +8,6 @@ import {
   updateCourseValidator
 } from '~/middlewares/courses.middlewares'
 import { accessTokenValidator, isAdminValidator } from '~/middlewares/users.middlewares'
-import databaseService from '~/services/database.services'
 import { wrapHandler } from '~/utils/wrapHandler'
 
 const coursesRouter = Router()
@@ -71,8 +69,8 @@ coursesRouter.put(
  * }
  */
 
-coursesRouter.put(
-  '/delete/:course_id',
+coursesRouter.delete(
+  '/:course_id',
   accessTokenValidator,
   isAdminValidator,
   deleteCourseValidator,
@@ -80,7 +78,7 @@ coursesRouter.put(
 )
 
 /**
- * Route lấy danh sách khóa học
+ * Route lấy danh sách khóa học cho user
  * [GET]: /courses
  * query: {
  * page?: number
@@ -89,6 +87,18 @@ coursesRouter.put(
  */
 
 coursesRouter.get('', getAllCoursesValidator, wrapHandler(coursesController.getAll))
+
+/**
+ * Route lấy thông tin khóa học cho admin
+ */
+
+coursesRouter.get(
+  '/admin',
+  accessTokenValidator,
+  isAdminValidator,
+  getAllCoursesValidator,
+  wrapHandler(coursesController.getAllByAdmin)
+)
 
 /**
  * Route lấy thông tin khóa học

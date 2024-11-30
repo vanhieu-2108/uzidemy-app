@@ -8,7 +8,6 @@ import { ObjectId } from 'mongodb'
 const payos = new PayOS(envConfig.payosCLientId, envConfig.payosApiKey, envConfig.payosChecksumKey)
 class PaymentController {
   async create(req: Request, res: Response) {
-    // const { user_id } = req.decoded_access_token as TokenPayload
     let orderCode
     let findOrder
     do {
@@ -18,11 +17,11 @@ class PaymentController {
     const currentTimestamp = Math.floor(Date.now() / 1000)
     const expirationTimestamp = currentTimestamp + 300 // 5 minutes
     const order: CheckoutRequestType = {
-      amount: req.body.amount || 2000,
+      amount: req.body.amount,
       orderCode,
       description: req.body.description || 'Thanh toán khóa học',
-      returnUrl: env === 'dev' ? `${envConfig.host}/success.html` : '',
-      cancelUrl: env === 'dev' ? `${envConfig.host}/cancel.html` : '',
+      returnUrl: env === 'dev' ? `${envConfig.hostClient}/success` : '',
+      cancelUrl: env === 'dev' ? `${envConfig.hostClient}/cancel` : '',
       expiredAt: expirationTimestamp
     }
     const paymentLink = await payos.createPaymentLink(order)
@@ -32,10 +31,15 @@ class PaymentController {
         price: order.amount,
         status: paymentLink.status as any,
         course_id: new ObjectId(req.body.course_id),
-        user_id: new ObjectId('66a0afef9568688e0558dd62')
+        user_id: new ObjectId(req.body.user_id)
       })
     )
-    res.redirect(303, paymentLink.checkoutUrl)
+    return res.json({
+      message: 'Tạo link thanh toán thành công',
+      result: {
+        checkoutURL: paymentLink.checkoutUrl
+      }
+    })
   }
   async receiveHook(req: Request, res: Response) {
     const data = req.body

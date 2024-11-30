@@ -20,10 +20,16 @@ import {
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import { Course } from "@/types/courses";
+import { useEffect, useState } from "react";
 
 export default function Courses({ data }: { data: Course[] }) {
   const router = useRouter();
   const deleteCourseMutation = useDeleteCourse();
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   const handleDeleteCourse = async (id: string) => {
     deleteCourseMutation.mutate(id, {
@@ -44,7 +50,7 @@ export default function Courses({ data }: { data: Course[] }) {
           <TableRow>
             <TableHead className="w-[100px]">Ảnh</TableHead>
             <TableHead>Tiêu đề</TableHead>
-            <TableHead>Mô tả</TableHead>
+            <TableHead className="hidden md:block">Mô tả</TableHead>
             <TableHead>Trạng thái</TableHead>
             <TableHead>Giá gốc</TableHead>
             <TableHead>Giá giảm</TableHead>
@@ -64,7 +70,7 @@ export default function Courses({ data }: { data: Course[] }) {
                 />
               </TableCell>
               <TableCell>{course.title}</TableCell>
-              <TableCell className="max-w-[300px]">
+              <TableCell className="max-w-[300px] hidden md:block">
                 {course.description.slice(0, 100) + (course.description.length > 100 ? "..." : "")}
               </TableCell>
               <TableCell>
@@ -88,28 +94,35 @@ export default function Courses({ data }: { data: Course[] }) {
                   <Link href={`/manage/courses/edit/${course.slug}`} title="Chỉnh sửa">
                     <IconPen className="w-5 h-5" />
                   </Link>
-                  <button title="Thêm nội dung khóa học">
+                  <Link
+                    href={`/manage/courses/content/${course.slug}?course_id=${course._id}`}
+                    title="Thêm nội dung khóa học"
+                  >
                     <IconBook className="w-5 h-5" />
-                  </button>
-                  <button title="Xóa khóa học">
-                    <AlertDialog>
-                      <AlertDialogTrigger>
-                        <IconTrash className="w-5 h-5" />
-                      </AlertDialogTrigger>
-                      <AlertDialogContent>
-                        <AlertDialogHeader>
-                          <AlertDialogTitle>Bạn có chắc chắn muốn xóa khóa học này không?</AlertDialogTitle>
-                          <AlertDialogDescription>
-                            Khóa học này sẽ bị xóa nhưng vẫn có thể khôi phục lại.
-                          </AlertDialogDescription>
-                        </AlertDialogHeader>
-                        <AlertDialogFooter>
-                          <AlertDialogCancel>Hủy</AlertDialogCancel>
-                          <AlertDialogAction onClick={() => handleDeleteCourse(course._id)}>Tiếp tục</AlertDialogAction>
-                        </AlertDialogFooter>
-                      </AlertDialogContent>
-                    </AlertDialog>
-                  </button>
+                  </Link>
+                  {isClient && (
+                    <button title="Xóa khóa học">
+                      <AlertDialog>
+                        <AlertDialogTrigger>
+                          <IconTrash className="w-5 h-5" />
+                        </AlertDialogTrigger>
+                        <AlertDialogContent>
+                          <AlertDialogHeader>
+                            <AlertDialogTitle>Bạn có chắc chắn muốn xóa khóa học này không?</AlertDialogTitle>
+                            <AlertDialogDescription>
+                              Khóa học này sẽ bị xóa nhưng vẫn có thể khôi phục lại.
+                            </AlertDialogDescription>
+                          </AlertDialogHeader>
+                          <AlertDialogFooter>
+                            <AlertDialogCancel>Hủy</AlertDialogCancel>
+                            <AlertDialogAction onClick={() => handleDeleteCourse(course._id)}>
+                              Tiếp tục
+                            </AlertDialogAction>
+                          </AlertDialogFooter>
+                        </AlertDialogContent>
+                      </AlertDialog>
+                    </button>
+                  )}
                 </div>
               </TableCell>
             </TableRow>

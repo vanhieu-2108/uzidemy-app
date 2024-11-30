@@ -57,3 +57,10 @@ export const useDeleteCourse = () => {
     },
   });
 };
+
+export const useGetCoursesContent = (id: string) => {
+  return useQuery({
+    queryKey: ["coursesContent", id],
+    queryFn: () => coursesApi.getContentCourses(id),
+  });
+};

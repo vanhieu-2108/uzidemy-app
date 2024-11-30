@@ -20,6 +20,7 @@ config({
 })
 const envConfig = {
   host: process.env.HOST,
+  hostClient: process.env.HOST_CLIENT,
   port: process.env.PORT || 4000,
   dbName: process.env.DB_NAME,
   dbUsername: process.env.DB_USERNAME,

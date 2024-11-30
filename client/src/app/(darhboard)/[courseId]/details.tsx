@@ -1,5 +1,5 @@
+"use client";
 import { Course } from "@/types/courses";
-import Link from "next/link";
 import Markdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
@@ -7,11 +7,52 @@ import rehypeSanitize from "rehype-sanitize";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Checkbox } from "@/components/ui/checkbox";
 import Image from "next/image";
+import { formatPriceToVND } from "@/utils/utils";
+import { Badge } from "@/components/ui/badge";
+import { percentPrice } from "@/lib/utils";
+import useCreatePayment from "@/queries/usePayment";
+import { useRouter } from "next/navigation";
+import { useAppProvider } from "@/components/app-provider";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+import { useEffect, useState } from "react";
+
 export default function Details({ course }: { course: Course }) {
+  const [isClient, setIsClient] = useState(false);
+  const { user } = useAppProvider();
+  const router = useRouter();
+  const createPaymentMutation = useCreatePayment();
+  const body = {
+    amount: course.sale_price,
+    description: `Mua khóa học tại Uzidemy`,
+    course_id: "673ca8c9cfe3b26f3e8b3d94",
+    user_id: user?._id,
+  };
+  const handlePayment = () => {
+    createPaymentMutation.mutate(body, {
+      onSuccess: (data) => {
+        router.push(data.payload.result.checkoutURL);
+      },
+    });
+  };
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
+
   return (
-    <div className=" text-white py-4 md:py-10 flex items-center justify-between">
-      <div className="max-w-6xl w-full grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6">
-        <div className=" p-4 md:p-6 ">
+    <div className=" text-white py-4 flex items-center justify-between">
+      <div className="w-full grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-6">
+        <div>
           <Image
             src={course.image}
             alt={course.title}
@@ -43,7 +84,7 @@ export default function Details({ course }: { course: Course }) {
             ))}
           </div>
           <h2 className="text-2xl md:text-4xl font-bold text-gray-800 mt-10">Câu hỏi thường gặp</h2>
-          <Accordion type="multiple">
+          <Accordion type="multiple" className="mt-5">
             {course.faqs.map((faq) => (
               <AccordionItem value={faq.question} key={faq.question}>
                 <AccordionTrigger className="text-lg font-bold text-gray-800">{faq.question}</AccordionTrigger>
@@ -52,63 +93,65 @@ export default function Details({ course }: { course: Course }) {
             ))}
           </Accordion>
         </div>
-        <div className="bg-white border border-gray-300 mb-11 mt-6 p-4 md:p-6 rounded-lg flex flex-col justify-center h-max sticky top-16 z-12 right-0">
-          {/* Price Section */}
-          <div className="text-center mb-4 md:mb-6 flex relative ">
-            <div className="text-xl  font-bold text-red-500 m-2 ">499.000 VNĐ</div>
-            <div className="text-sm  text-gray-500 line-through m-2 ">699.000 VNĐ</div>
-            <div className="text-sm md:text-base text-red-400 rounded-lg bg-red-600 px-2 py1 absolute top-0 right-0">
-              -29%
+        <div className="bg-white border border-gray-300 p-4 rounded-lg flex flex-col justify-center h-max sticky top-16 z-12 right-0">
+          <div className="text-center mb-4 md:mb-6 flex relative items-center justify-between">
+            <div className="flex items-center justify-end">
+              <div className="text-xl font-bold text-red-500 m-2 ">{formatPriceToVND(course.sale_price)}</div>
+              <div className="text-lg text-gray-500 line-through m-2 ">{formatPriceToVND(course.original_price)}</div>
             </div>
+            <Badge>{percentPrice(course.original_price, course.sale_price)}%</Badge>
           </div>
 
           <div className="mb-4 md:mb-6">
-            <h2 className="text-lg md:text-xl font-bold mb-3 text-center">Khóa học bao gồm:</h2>
-            <ul className="space-y-2 text-gray-400">
+            <h2 className="text-lg md:text-xl font-bold mb-3 text-left text-gray-600 ml-2">Khóa học bao gồm:</h2>
+            <ul className="space-y-2 text-gray-400 ml-2">
               <li className="flex items-center text-sm md:text-base">
-                <p className="mr-2 text-white" /> 1 giờ học
+                <p className="text-gray-500 text-base">Video quay Full HD</p>
               </li>
               <li className="flex items-center text-sm md:text-base">
-                <p className="mr-2 text-white" /> Video quay Full HD
+                <p className="text-gray-500 text-base">Có nhóm hỗ trợ</p>
               </li>
               <li className="flex items-center text-sm md:text-base">
-                <p className="mr-2 text-white" /> Có nhóm hỗ trợ
+                <p className="text-gray-500 text-base">Tài liệu kèm theo</p>
               </li>
               <li className="flex items-center text-sm md:text-base">
-                <p className="mr-2 text-white" /> Tài liệu kèm theo
+                <p className="text-gray-500 text-base">Giảng viên nhiệt tình</p>
               </li>
             </ul>
           </div>
-
-          <div className="text-center mb-4 md:mb-6">
-            <Link href="/pay">
-              <button className="bg-gradient-to-r from-purple-500 to-yellow-500 text-white font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg w-full text-sm md:text-base">
-                Mua ngay
-              </button>
-            </Link>
-          </div>
-
-          {/* Discount Code Section */}
-          <div className="mb-4 md:mb-6">
-            <input
-              type="text"
-              placeholder="NHẬP MÃ GIẢM GIÁ"
-              className="p-2 md:p-3 bg-gray-700 text-white rounded-lg w-full mb-2 md:mb-4 text-sm  focus:outline-none focus:ring-2 focus:ring-purple-500"
-            />
-            <button className="bg-gradient-to-r from-gray-600 to-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 md:py-2 md:px-6 rounded-lg w-full text-sm md:text-base">
-              Áp dụng
-            </button>
-          </div>
-
-          {/* Help Link */}
-          <div className="text-center text-gray-400 text-sm ">
-            Bạn chưa biết cách mua khóa học?{" "}
-            <a href="#" className="text-blue-400 underline">
-              Nhấn vào đây nha
-            </a>
-          </div>
+          {isClient && (
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <div className="text-center mb-4 md:mb-6">
+                  <button className="bg-gradient-to-r from-purple-500 to-yellow-500 text-white font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg w-full text-sm md:text-base">
+                    Mua ngay
+                  </button>
+                </div>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Xác nhận đơn hàng</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    <div className="flex gap-4">
+                      <Image alt={course.title} src={course.image} width={100} height={100} className="rounded-lg" />
+                      <p className="text-gray-800 text-lg font-bold">{course.title}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-gray-800 text-lg font-bold">{formatPriceToVND(course.sale_price)}</p>
+                        <p className="text-gray-500 line-through">{formatPriceToVND(course.original_price)}</p>
+                      </div>
+                    </div>
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Thoát</AlertDialogCancel>
+                  <AlertDialogAction onClick={handlePayment}>Tiếp tục</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
+          )}
         </div>
       </div>
+      <div id="payos-checkout"></div>
     </div>
   );
 }

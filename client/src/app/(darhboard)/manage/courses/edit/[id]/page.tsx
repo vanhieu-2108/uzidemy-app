@@ -12,6 +12,8 @@ import MDEditor from "@uiw/react-md-editor";
 import useDynamicFieldArray from "@/hooks/useDynamicFieldArray";
 import { Faq } from "@/types/courses";
 import { toast } from "react-toastify";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   slug: z.string().nonempty("Đường dẫn không được để trống"),
@@ -31,6 +33,7 @@ const formSchema = z.object({
     )
     .optional(),
   _id: z.string().optional(),
+  status: z.string().optional(),
 });
 type FormData = z.infer<typeof formSchema>;
 
@@ -40,6 +43,7 @@ export default function Page({ params }: { params: { id: string } }) {
   const imageRef = useRef<HTMLInputElement>(null);
   const [editor, setEditor] = useState("");
   const [faqs, setFAQs] = useState<Faq[]>([]);
+  const router = useRouter();
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -78,6 +82,8 @@ export default function Page({ params }: { params: { id: string } }) {
         {
           onSuccess: (data) => {
             toast.success(data.payload.message);
+            router.push("/manage/courses");
+            router.refresh();
           },
           onError: (error) => {
             console.log(error);
@@ -88,6 +94,8 @@ export default function Page({ params }: { params: { id: string } }) {
       updateCourseMutation.mutate(values as any, {
         onSuccess: (data) => {
           toast.success(data.payload.message);
+          router.push("/manage/courses");
+          router.refresh();
         },
         onError: (error) => {
           console.log(error);
@@ -174,19 +182,39 @@ export default function Page({ params }: { params: { id: string } }) {
         onSubmit={form.handleSubmit(onSubmit, (error) => console.log("error", error))}
         className="space-y-8 pt-8 pb-16"
       >
-        <FormField
-          control={form.control}
-          name="title"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Tiêu đề</FormLabel>
-              <FormControl>
-                <Input placeholder="Enter your title" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        <div className="grid grid-cols-2 gap-10">
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Tiêu đề</FormLabel>
+                <FormControl>
+                  <Input placeholder="Enter your title" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="title"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Trạng thái</FormLabel>
+                <Select onValueChange={(value) => form.setValue("status", value)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder={data?.payload.result.status} />
+                  </SelectTrigger>
+                  <SelectContent className="w-full">
+                    <SelectItem value="ACTIVE">Active</SelectItem>
+                    <SelectItem value="DELETED">Deleted</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
+        </div>
         <div className="grid grid-cols-2 gap-10">
           <FormField
             control={form.control}

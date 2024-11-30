@@ -80,9 +80,23 @@ export const createQuizValidator = validate(
         errorMessage: 'correct_answer không được để trống'
       }
     },
-    'questions.*.options.*.is_correct': {
-      isBoolean: {
-        errorMessage: 'is_correct phải là một boolean'
+    'questions.*.options.*.option_id': {
+      isString: {
+        errorMessage: 'option_id phải là một chuỗi'
+      }
+    },
+    correct_option_id: {
+      notEmpty: {
+        errorMessage: 'Id của câu trả lời đúng không được để trống'
+      },
+      custom: {
+        options: (value, { req }) => {
+          const { questions } = req.body
+          if (!questions.some((question: any) => question.options.some((option: any) => option.option_id === value))) {
+            return false
+          }
+          return true
+        }
       }
     }
   })
@@ -163,9 +177,23 @@ export const updateQuizValidator = validate(
         errorMessage: 'correct_answer không được để trống'
       }
     },
-    'questions.*.options.*.is_correct': {
-      isBoolean: {
-        errorMessage: 'is_correct phải là một boolean'
+    'questions.*.options.*.option_id': {
+      isString: {
+        errorMessage: 'option_id phải là một chuỗi'
+      }
+    },
+    correct_option_id: {
+      notEmpty: {
+        errorMessage: 'Id của câu trả lời đúng không được để trống'
+      },
+      custom: {
+        options: (value, { req }) => {
+          const { questions } = req.body
+          if (!questions.some((question: any) => question.options.some((option: any) => option.option_id === value))) {
+            return false
+          }
+          return true
+        }
       }
     }
   })

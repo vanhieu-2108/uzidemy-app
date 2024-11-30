@@ -4,12 +4,12 @@ import { formatPriceToVND } from "@/utils/utils";
 import Image from "next/image";
 import Link from "next/link";
 
-export default function Course({ course }: { course: CourseType }) {
+export default function Course({ course, isLearn = false }: { course: CourseType; isLearn?: boolean }) {
   return (
     <div className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col">
-      <Image src={course.image} alt={course.title} width={300} height={200} className="w-full h-[300px] object-cover" />
-      <div className="p-4 flex flex-col h-full">
-        <h3 className="font-semibold text-2xl">{course.title}</h3>
+      <Image src={course.image} alt={course.title} width={300} height={200} className="w-full h-[200px] object-cover" />
+      <div className="p-4 flex flex-col">
+        <h3 className="font-semibold text-2xl mb-5">{course.title}</h3>
         <div className="flex justify-between items-center mt-auto">
           <div className="flex items-center">
             <span className="text-gray-500 text-lg flex items-center font-bold">
@@ -31,7 +31,9 @@ export default function Course({ course }: { course: CourseType }) {
             <span className="text-red-500 text-lg font-bold">{formatPriceToVND(course.sale_price)}</span>
           </div>
         </div>
-        <Link href={`/${course.slug}`}>
+        <Link
+          href={isLearn ? `/lecture?id=${course.chapters[0].lectures[0]}&course_id=${course._id}` : `/${course.slug}`}
+        >
           <Button className="mt-5 w-full bg-blue-500 text-white py-2 h-14 rounded text-lg font-bold">
             Xem chi tiết
           </Button>

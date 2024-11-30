@@ -41,7 +41,7 @@ sale_price: number
 view_count: number
 created_at: Date
 updated_at: Date
-_destroy: boolean
+status: string
 chapters: ObjectId[]
 benefits: string[]
 requirements: string[]
@@ -86,12 +86,13 @@ questions: [
     question: string
     options: [
       {
-        answer: string
-        is_correct: boolean
+        correct_answer: string
+        option_id: string
       }
     ]
-  }
+  },
 ]
+correct_option_id: string
 created_at: Date
 updated_at: Date
 ```
@@ -110,41 +111,6 @@ updated_at: Date
 _destroy: boolean
 ```
 
-## Comments
-
-```ts
-_id: ObjectId
-user_id: ObjectId
-parent_id: ObjectId | null
-object_id: ObjectId
-object_type: 'LECTURE' | 'POST'
-content: string
-_destroy: boolean
-created_at: Date
-updated_at: Date
-```
-
-## Notifications
-
-```ts
-_id: ObjectId
-user_id: ObjectId | null // Nếu null thì là notification cho tất cả user
-content: string
-created_at: Date
-read: boolean
-```
-
-## Histories
-
-```ts
-_id: ObjectId
-user_id: ObjectId
-course_id: ObjectId
-lesson_id: ObjectId
-status: 'COMPLETED' | 'IN_PROGRESS'
-created_at: Date
-```
-
 ## Posts
 
 ```ts
@@ -154,6 +120,7 @@ title: string
 content: string
 author: string
 image: string
+status: 'PENDING' | 'APPROVED' | 'REJECTED'
 created_at: Date
 updated_at: Date
 _destroy: boolean

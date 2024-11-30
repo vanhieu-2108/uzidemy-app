@@ -21,6 +21,7 @@ export const setRefreshTokenToLocalStorage = (refreshToken: string) =>
 export const removeTokensFromLocalStorage = () => {
   isBrowser && localStorage.removeItem("access_token");
   isBrowser && localStorage.removeItem("refresh_token");
+  isBrowser && localStorage.removeItem("user");
 };
 
 export const isAdmin = (token: string) => {
@@ -30,4 +31,8 @@ export const isAdmin = (token: string) => {
 
 export const formatVND = (amount: number) => {
   return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND" }).format(amount);
+};
+
+export const percentPrice = (originalPrice: number, salePrice: number) => {
+  return Math.round(((originalPrice - salePrice) / originalPrice) * 100);
 };

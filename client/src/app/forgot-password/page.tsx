@@ -1,13 +1,13 @@
 "use client";
-import { useRouter, useSearchParams } from "next/navigation"; // Đảm bảo bạn import từ next/navigation
+import { useSearchParams } from "next/navigation"; // Đảm bảo bạn import từ next/navigation
 
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import EmailForm from "./components/email-form";
 import VerificationForm from "./components/verification-form";
 import ResetPasswordForm from "./components/reset-password-form";
 import SuccessMessage from "./components/success-message";
 
-export default function ForgotPasswordPage() {
+function Page() {
   const searchParams = useSearchParams(); // Lấy các tham số truy vấn
   const [step, setStep] = useState<string | null>(null);
 
@@ -34,4 +34,12 @@ export default function ForgotPasswordPage() {
   }
 
   return <div>{content}</div>;
+}
+
+export default function ForgotPasswordPage() {
+  return (
+    <Suspense>
+      <Page />
+    </Suspense>
+  );
 }

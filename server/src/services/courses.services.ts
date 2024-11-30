@@ -46,18 +46,25 @@ class CourseServices {
     const page = Number(query?.page) || 1
     const limit = Number(query?.limit) || 10
     const [result, total_page] = await Promise.all([
-      await databaseService.courses
-        .find({
-          status: ECourseStatus.ACTIVE
-        })
-        .sort({
-          created_at: -1
-        })
-        .skip((page - 1) * limit)
-        .limit(limit)
+      databaseService.courses
+        .aggregate([
+          { $match: { status: ECourseStatus.ACTIVE } },
+          { $sort: { created_at: -1 } },
+          { $skip: (page - 1) * limit },
+          { $limit: limit },
+          {
+            $lookup: {
+              from: 'chapters',
+              localField: '_id',
+              foreignField: 'course_id',
+              as: 'chapters'
+            }
+          }
+        ])
         .toArray(),
-      Math.ceil((await databaseService.courses.countDocuments()) / limit)
+      Math.ceil((await databaseService.courses.countDocuments({ status: ECourseStatus.ACTIVE })) / limit)
     ])
+
     return {
       data: result,
       pagination: {
@@ -72,15 +79,22 @@ class CourseServices {
     const page = Number(query?.page) || 1
     const limit = Number(query?.limit) || 10
     const [result, total_page] = await Promise.all([
-      await databaseService.courses
-        .find()
-        .sort({
-          created_at: -1
-        })
-        .skip((page - 1) * limit)
-        .limit(limit)
+      databaseService.courses
+        .aggregate([
+          { $sort: { created_at: -1 } },
+          { $skip: (page - 1) * limit },
+          { $limit: limit },
+          {
+            $lookup: {
+              from: 'chapters',
+              localField: '_id',
+              foreignField: 'course_id',
+              as: 'chapters'
+            }
+          }
+        ])
         .toArray(),
-      Math.ceil((await databaseService.courses.countDocuments()) / limit)
+      Math.ceil((await databaseService.courses.countDocuments({ status: ECourseStatus.ACTIVE })) / limit)
     ])
     return {
       data: result,

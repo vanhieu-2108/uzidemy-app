@@ -16,9 +16,10 @@ const quizzesRouter = Router()
  *   options: [
  *     {
  *       correct_answer: string
- *       is_correct: true | false
+ *       option_id: string
  *     }
- * ]
+ * ],
+ * correct_option_id: string
  * }
  * }
  */
@@ -37,9 +38,10 @@ quizzesRouter.post('', accessTokenValidator, createQuizValidator, wrapHandler(qu
  * options: [
  *  {
  *   correct_answer: string
- *   is_correct: true | false
+ *   option_id: string
  *  }
- * ]
+ * ],
+ * correct_option_id: string
  * }
  * ]
  */

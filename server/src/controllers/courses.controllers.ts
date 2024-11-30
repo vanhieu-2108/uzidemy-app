@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from 'express'
+import { ObjectId } from 'mongodb'
 import coursesServices from '~/services/courses.services'
+import databaseService from '~/services/database.services'
 class CoursesController {
   async create(req: Request, res: Response, next: NextFunction) {
     await coursesServices.create(req.body)
@@ -53,6 +55,41 @@ class CoursesController {
   ) {
     const { slug } = req.params
     const result = await coursesServices.getCourseBySlug(slug)
+    return res.json({
+      message: 'Lấy thông tin khóa học thành công',
+      result
+    })
+  }
+  async getCourseContent(req: Request, res: Response, next: NextFunction) {
+    const { course_id } = req.params
+    // Tìm khóa học trong database
+    const course = await databaseService.courses.findOne({
+      _id: new ObjectId(course_id)
+    })
+    // Nếu không tìm thấy khóa học
+    if (!course) {
+      return res.status(404).json({
+        message: 'Không tìm thấy khóa học'
+      })
+    }
+    // Lấy thông tin chapters và lectures liên quan
+    const result = await databaseService.chapters
+      .aggregate([
+        {
+          $match: {
+            course_id: new ObjectId(course_id)
+          }
+        },
+        {
+          $lookup: {
+            from: 'lectures',
+            localField: '_id',
+            foreignField: 'chapter_id',
+            as: 'lectures'
+          }
+        }
+      ])
+      .toArray()
     return res.json({
       message: 'Lấy thông tin khóa học thành công',
       result

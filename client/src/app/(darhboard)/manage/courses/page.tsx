@@ -7,6 +7,6 @@ export default async function CoursesPage() {
   const accessToken = cookieStore.get("accessToken")?.value;
   if (!accessToken) return null;
   const res = await coursesApi.getCourseToServer(accessToken);
-  const data = await res.payload.result.data;
+  const data = res.payload.result.data;
   return <Courses data={data} />;
 }

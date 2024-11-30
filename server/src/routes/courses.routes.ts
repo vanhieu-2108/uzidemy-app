@@ -110,4 +110,14 @@ coursesRouter.get(
 
 coursesRouter.get('/:slug', getCourseValidator, wrapHandler(coursesController.getCourseBySlug))
 
+/**
+ * Route lấy nôi dung khóa học
+ * [GET]: /courses/:course_id/content
+ * params: {
+ * course_id: string
+ * }
+ */
+
+coursesRouter.get('/:course_id/content', wrapHandler(coursesController.getCourseContent))
+
 export default coursesRouter

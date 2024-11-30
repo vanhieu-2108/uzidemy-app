@@ -36,6 +36,6 @@ chaptersRouter.put('/:chapter_id', accessTokenValidator, updateChapterValidator,
  * }
  */
 
-chaptersRouter.put('/delete/:chapter_id', accessTokenValidator, deleteChapterValidator, chaptersController.delete)
+chaptersRouter.delete('/:chapter_id', accessTokenValidator, deleteChapterValidator, chaptersController.delete)
 
 export default chaptersRouter

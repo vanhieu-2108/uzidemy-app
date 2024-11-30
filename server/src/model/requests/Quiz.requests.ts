@@ -4,7 +4,8 @@ export interface CreateReqQuizBody {
     question: string
     options: {
       correct_answer: string
-      is_correct: boolean
+      option_id: string
     }[]
   }[]
+  correct_option_id: string
 }

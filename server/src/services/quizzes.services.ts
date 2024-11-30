@@ -28,6 +28,9 @@ class QuizzesService {
         $currentDate: {
           updated_at: true
         }
+      },
+      {
+        returnDocument: 'after'
       }
     )
     return {

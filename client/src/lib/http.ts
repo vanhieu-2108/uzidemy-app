@@ -74,6 +74,7 @@ const request = async <Response>(
     },
     body,
     method,
+    mode: "cors",
   });
   const payload: Response = await res.json();
   const data = {

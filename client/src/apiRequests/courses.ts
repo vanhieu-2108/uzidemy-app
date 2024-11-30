@@ -1,5 +1,14 @@
 import http from "@/lib/http";
-import { AddCourse, Course, ResultAddCourse, ResultCourses, ResultUploadImage, UpdateCourse } from "@/types/courses";
+import {
+  AddCourse,
+  Course,
+  CoursesContent,
+  ResultAddCourse,
+  ResultCourses,
+  ResultUploadImage,
+  ResultUploadVideo,
+  UpdateCourse,
+} from "@/types/courses";
 import { Response } from "@/types/res";
 
 const coursesApi = {
@@ -14,8 +23,12 @@ const coursesApi = {
         Authorization: `Bearer ${accessToken}`,
       },
     }),
-  getCourse: (slug: string) => http.get<Response<Course>>(`/courses/${slug}`),
+  getCourse: (slug: string) =>
+    http.get<Response<Course>>(`/courses/${slug}`, {
+      cache: "no-store",
+    }),
   uploadImage: (body: FormData) => http.post<Response<ResultUploadImage[]>>("/medias/upload-image", body),
+  uploadVideo: (body: FormData) => http.post<Response<ResultUploadVideo[]>>("/medias/upload-video", body),
   addCourse: (body: AddCourse) => http.post<Response<ResultAddCourse>>("/courses", body),
   updateCourse: (body: UpdateCourse) =>
     http.put<Response<Course>>(`/courses/${body._id}`, body, {
@@ -29,6 +42,7 @@ const coursesApi = {
     >(`/courses/${id}`, {
       cache: "no-store",
     }),
+  getContentCourses: (id: string) => http.get<Response<CoursesContent[]>>(`/courses/${id}/content`),
 };
 
 export default coursesApi;

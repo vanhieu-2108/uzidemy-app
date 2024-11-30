@@ -37,7 +37,7 @@ class MediasService {
     const result: Media[] = await Promise.all(
       files.map(async (file) => {
         return {
-          url: `${envConfig.host}/stream-video/${file.newFilename}`,
+          url: `${envConfig.host}/static/stream-video/${file.newFilename}`,
           type: EMediaType.VIDEO
         }
       })

@@ -1,4 +1,4 @@
-import { compare, hash } from 'bcrypt'
+import { compare, hash } from 'bcryptjs'
 import jwt, { SignOptions } from 'jsonwebtoken'
 import { TokenPayload } from '~/model/requests/User.requests'
 export const hashPassword = async (password: string): Promise<string> => {

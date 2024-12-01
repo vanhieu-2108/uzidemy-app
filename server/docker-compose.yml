@@ -1,0 +1,10 @@
+version: '1'
+
+services:
+  web:
+    build: .
+    container_name: web-app
+    ports:
+      - '4000:4000'
+    volumes:
+      - .:/app

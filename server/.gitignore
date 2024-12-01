@@ -1,2 +1,7 @@
 node_modules/
+uploads/
 dist/
+.env
+.env.prod
+a.md
+db.md

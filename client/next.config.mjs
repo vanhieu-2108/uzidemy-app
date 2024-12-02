@@ -20,6 +20,12 @@ const nextConfig = {
         port: "4000",
         pathname: "/static/images/**",
       },
+      {
+        protocol: "https",
+        hostname: "api.levanhieu.xyz",
+        port: "",
+        pathname: "/**",
+      },
     ],
   },
   experimental: {

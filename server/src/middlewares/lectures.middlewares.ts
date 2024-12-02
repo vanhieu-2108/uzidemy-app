@@ -105,9 +105,9 @@ export const updateLectureValidator = validate(
             const findLecture = await databaseService.lectures.findOne({
               slug: value
             })
-            if (findLecture) {
+            if (!findLecture) {
               throw new ErrorWithStatus({
-                message: 'Đường dẫn bài học đã tồn tại',
+                message: 'Bài học không tồn tại',
                 status: HTTP_STATUS.BAD_REQUEST
               })
             }
@@ -202,7 +202,7 @@ export const updateLectureValidator = validate(
         }
       }
     },
-    ['body']
+    ['body', 'params']
   )
 )
 

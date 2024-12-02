@@ -1,5 +1,5 @@
 import { lectureApis } from "@/apiRequests/lectures";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useCreateLecture = () => {
   return useMutation({
@@ -11,5 +11,18 @@ export const useGetLecture = (id: string) => {
   return useQuery({
     queryKey: ["lecture", id],
     queryFn: () => lectureApis.getLecture(id),
+  });
+};
+
+export const useGetLecturesByChapter = (chapterId: string) => {
+  return useQuery({
+    queryKey: ["lectures", chapterId],
+    queryFn: () => lectureApis.getLecturesByChapter(chapterId),
+  });
+};
+
+export const useUpdateLectureMutation = () => {
+  return useMutation({
+    mutationFn: lectureApis.updateLecture,
   });
 };

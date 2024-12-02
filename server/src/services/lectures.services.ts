@@ -137,6 +137,21 @@ class LecturesService {
       result: findLecture
     }
   }
+
+  async getLecturesByChapter(chapter_id: string) {
+    const findChapter = await databaseService.chapters.findOne({ _id: new ObjectId(chapter_id) })
+    if (!findChapter) {
+      throw new ErrorWithStatus({
+        message: 'Không tìm thấy chương',
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    const lectures = await databaseService.lectures.find({ chapter_id: new ObjectId(chapter_id) }).toArray()
+    return {
+      message: 'Lấy danh sách bài học thành công',
+      result: lectures
+    }
+  }
 }
 
 const lecturesService = new LecturesService()

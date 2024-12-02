@@ -205,15 +205,6 @@ export const updateCourseValidator = validate(
             max: 400
           },
           errorMessage: 'Đường dẫn ảnh phải từ 0 đến 400 ký tự'
-        },
-        custom: {
-          options: (value) => {
-            if (value) {
-              const regex = /(http(s)?:\/\/[a-zA-Z0-9.-]+(:\d+)?(\/[a-zA-Z0-9._-]+)*)\.(jpg|gif|png)/
-              if (!regex.test(value)) throw new Error('Đường dẫn ảnh không hợp lệ')
-            }
-            return true
-          }
         }
       },
       view_count: {

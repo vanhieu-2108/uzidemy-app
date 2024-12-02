@@ -25,6 +25,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function Details({ course }: { course: Course }) {
   const [isClient, setIsClient] = useState(false);
@@ -123,9 +124,17 @@ export default function Details({ course }: { course: Course }) {
             <AlertDialog>
               <AlertDialogTrigger>
                 <div className="text-center mb-4 md:mb-6">
-                  <button className="bg-gradient-to-r from-purple-500 to-yellow-500 text-white font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg w-full text-sm md:text-base">
-                    Mua ngay
-                  </button>
+                  {!user ? (
+                    <Link href="/login">
+                      <button className="bg-gradient-to-r from-purple-500 to-yellow-500 text-white font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg w-full text-sm md:text-base">
+                        Đăng nhập để mua
+                      </button>
+                    </Link>
+                  ) : (
+                    <button className="bg-gradient-to-r from-purple-500 to-yellow-500 text-white font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg w-full text-sm md:text-base">
+                      Mua ngay
+                    </button>
+                  )}
                 </div>
               </AlertDialogTrigger>
               <AlertDialogContent>

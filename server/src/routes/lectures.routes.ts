@@ -60,4 +60,11 @@ lecturesRouter.put('/status/:lecture_id', accessTokenValidator, changeStatusVali
 
 lecturesRouter.get('/:lecture_id', accessTokenValidator, lecturesController.getLecture)
 
+/**
+ * Route lấy danh sách bài học theo chapter
+ * [GET]: /lectures/chapter/:chapter_id
+ */
+
+lecturesRouter.get('/chapter/:chapter_id', accessTokenValidator, lecturesController.getLecturesByChapter)
+
 export default lecturesRouter

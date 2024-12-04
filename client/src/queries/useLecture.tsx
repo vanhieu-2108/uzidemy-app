@@ -26,3 +26,9 @@ export const useUpdateLectureMutation = () => {
     mutationFn: lectureApis.updateLecture,
   });
 };
+
+export const useDeleteLectureMutation = () => {
+  return useMutation({
+    mutationFn: lectureApis.deleteLecture,
+  });
+};

@@ -17,9 +17,11 @@ import { useContext } from "react";
 import { useLogout } from "@/queries/useAccount";
 import { removeTokensFromLocalStorage } from "@/lib/utils";
 import IconUser from "@/components/icons/icon-user";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
   const { user, setUser } = useContext(AppProviderContext);
+  const router = useRouter();
 
   const logoutMutation = useLogout();
 
@@ -31,6 +33,7 @@ export default function Header() {
         onSuccess: (data) => {
           setUser(undefined);
           removeTokensFromLocalStorage();
+          router.push("/");
         },
       }
     );

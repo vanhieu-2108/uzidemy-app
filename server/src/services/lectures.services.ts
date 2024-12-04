@@ -152,6 +152,31 @@ class LecturesService {
       result: lectures
     }
   }
+  async updateFinishLecture(lecture_id: string) {
+    const lecture = await databaseService.lectures.findOne({ _id: new ObjectId(lecture_id) })
+    if (!lecture) {
+      throw new ErrorWithStatus({
+        message: 'Không tìm thấy bài học',
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    await databaseService.lectures.updateOne(
+      {
+        _id: new ObjectId(lecture_id)
+      },
+      {
+        $set: {
+          isWatched: true
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      }
+    )
+    return {
+      message: 'Cập nhật bài học đã hoàn thành thành công'
+    }
+  }
 }
 
 const lecturesService = new LecturesService()

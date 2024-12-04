@@ -44,7 +44,7 @@ lecturesRouter.put('/:lecture_id', accessTokenValidator, updateLectureValidator,
  * [PUT]: /lectures/:lecture_id
  */
 
-lecturesRouter.put('/delete/:lecture_id', accessTokenValidator, deleteLessonValidator, lecturesController.delete)
+lecturesRouter.delete('/:lecture_id', accessTokenValidator, deleteLessonValidator, lecturesController.delete)
 
 /**
  * Route thay đổi status của một bài học
@@ -66,5 +66,13 @@ lecturesRouter.get('/:lecture_id', accessTokenValidator, lecturesController.getL
  */
 
 lecturesRouter.get('/chapter/:chapter_id', accessTokenValidator, lecturesController.getLecturesByChapter)
+
+/**
+ * Route cập nhật một bài học đã hoàn thành
+ * [PUT]: /lectures/finish/:lecture_id
+ * body: {}
+ */
+
+lecturesRouter.put('/finish/:lecture_id', accessTokenValidator, lecturesController.updateFinishLecture)
 
 export default lecturesRouter

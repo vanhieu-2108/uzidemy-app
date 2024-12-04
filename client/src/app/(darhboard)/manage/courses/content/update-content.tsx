@@ -157,7 +157,7 @@ function Page() {
                     >
                       Thêm
                     </Button>
-                    <Link href={`/lectures?chapter_id=${chapter._id}`}>
+                    <Link href={`/manage/lectures?chapter_id=${chapter._id}`}>
                       <Button>Danh sách bài giảng</Button>
                     </Link>
                   </div>

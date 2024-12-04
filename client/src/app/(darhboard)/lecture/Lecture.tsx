@@ -1,7 +1,7 @@
 "use client";
 import "@vidstack/react/player/styles/default/theme.css";
 import "@vidstack/react/player/styles/default/layouts/video.css";
-import { MediaPlayer, MediaProvider } from "@vidstack/react";
+import { MediaPlayer, MediaPlayerInstance, MediaProvider, useMediaState } from "@vidstack/react";
 import { defaultLayoutIcons, DefaultVideoLayout } from "@vidstack/react/player/layouts/default";
 import useGetSearchParams from "@/hooks/useGetSearchParams";
 import { useGetCoursesContent } from "@/queries/useCourses";
@@ -16,14 +16,17 @@ import remarkGfm from "remark-gfm";
 import rehypeRaw from "rehype-raw";
 import rehypeSanitize from "rehype-sanitize";
 import Comments from "@/components/comments/Comments";
+import { useRef } from "react";
 
 export default function Lecture() {
+  const playerRef = useRef<MediaPlayerInstance>(null);
   const { course_id, id } = useGetSearchParams();
   const { data } = useGetCoursesContent(course_id);
   const { data: resLecture } = useGetLecture(id);
   const coursesContent = data?.payload.result;
   const router = useRouter();
   const dataLecture = resLecture?.payload.result;
+  const ended = useMediaState("ended", playerRef);
   if (!course_id || !id || !dataLecture) return null;
   const handleNextLecture = () => {
     if (dataLecture?.next_lecture_id) {
@@ -39,6 +42,7 @@ export default function Lecture() {
     <div className="grid grid-cols-1 lg:grid-cols-[600px,1fr] gap-6 py-10">
       <div>
         <MediaPlayer
+          ref={playerRef}
           crossOrigin="anonymous"
           className="aspect-video z-0"
           title="Sprite Fight"

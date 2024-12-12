@@ -1,10 +1,15 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React from "react";
+import coursesApi from "@/apiRequests/courses";
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const res = await coursesApi.getCourses();
   const router = useRouter();
 
+  const handleCreatePost = () => {
+    router.push("/manage/courses/blog/");
+  }
   const handleBlogClick = () => {
     router.push("/blog/1"); 
   };
@@ -12,9 +17,11 @@ export default function BlogPage() {
 
   return (
     <div className="relative max-w-6xl mx-auto p-8">
-   
+     {/* {data.map((course) => (
+          <BlogPage isLearn key={course._id} course={course} />
+        ))} */}
       <button
-        // onClick={handleCreatePost}
+         onClick={handleCreatePost}
         className="absolute top-8 right-8 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700"
       >
         Đăng bài viết

@@ -25,9 +25,10 @@ const BlogDetailPage = () => {
       <article className="prose prose-lg max-w-none">
         <p>
           Hello anh em, thì như blog trước mình có nói rằng mình không có dùng Ubuntu, nhưng sao lại có blog này? 🤔
+        </p>
+        <p>
           À thì mình mới cài lại Win 10, vì máy mình cũng yếu 😏, mà không có tiền mua nên mình đã cài lùi về Win10 xài cho nó sướng nha. Chứ đừng có nói mình bị thành người "tối cổ" nha 😤.
         </p>
-       
         <h2>I. Giới thiệu sơ lược</h2>
         <p>
           Lại nói về trước đó nữa, mình đã tu luyện thành pháp sư WSL nhưng vì Win11 mình cài nó cứ lag và cấu hình không hợp nên mình có thành tài cũng đến Tết Công Gô mới cài nổi. ...

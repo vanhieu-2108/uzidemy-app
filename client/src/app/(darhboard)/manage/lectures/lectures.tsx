@@ -48,7 +48,7 @@ export default function Lectures() {
   const searchParams = useGetSearchParams();
   const router = useRouter();
   const { data, refetch } = useGetLecturesByChapter(searchParams.chapter_id);
-  const lectures = data?.payload.result;
+  const lectures = (data as any)?.payload?.result;
   const videoRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [selectedLecture, setSelectedLecture] = useState<any | null>(null);

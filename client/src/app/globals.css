@@ -144,6 +144,10 @@
     @apply list-decimal;
   }
 
+  td {
+    @apply text-black;
+  }
+
   li {
     @apply mb-2 text-gray-500;
   }

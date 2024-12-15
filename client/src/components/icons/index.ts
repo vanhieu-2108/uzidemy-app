@@ -7,3 +7,5 @@ export { default as IconEye } from "./icon-eye";
 export { default as IconPen } from "./icon-pen";
 export { default as IconBookNote } from "./icon-book-type";
 export { default as IconTrash } from "./icon-trash";
+export { default as IconCheck } from "./icon-check";
+export { default as IconBox } from "./icon-box";

@@ -155,10 +155,16 @@ function Page() {
                         setEditChapter(chapter._id || "");
                       }}
                     >
-                      Thêm
+                      Thêm bài giảng
                     </Button>
                     <Link href={`/manage/lectures?chapter_id=${chapter._id}`}>
                       <Button>Danh sách bài giảng</Button>
+                    </Link>
+                    <Link href={`/manage/quizzes?chapter_id=${chapter._id}`}>
+                      <Button>Thêm quiz</Button>
+                    </Link>
+                    <Link href={`/manage/quizzes/list?chapter_id=${chapter._id}`}>
+                      <Button>Danh sách quiz</Button>
                     </Link>
                   </div>
                 )}

@@ -8,7 +8,12 @@ import databaseService from '~/services/database.services'
 class LecturesService {
   async create(data: CreateLectureReqBody) {
     const mongoId = new ObjectId()
-    const findLastLecture = await databaseService.lectures.findOne({}, { sort: { created_at: -1 } })
+    const findLastLecture = await databaseService.lectures.findOne(
+      {
+        course_id: new ObjectId(data.course_id)
+      },
+      { sort: { created_at: -1 } }
+    )
     if (findLastLecture) {
       await databaseService.lectures.updateOne(
         {

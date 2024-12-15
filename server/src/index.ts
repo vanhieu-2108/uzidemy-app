@@ -17,6 +17,7 @@ import { rateLimit } from 'express-rate-limit'
 import compression from 'compression'
 import envConfig from '~/utils/config'
 import postsRouter from '~/routes/posts.routes'
+import progressRouter from '~/routes/progress.routes'
 const app = express()
 const port = envConfig.port
 app.use(
@@ -32,7 +33,7 @@ app.use(helmet())
 app.use(
   rateLimit({
     windowMs: 15 * 60 * 1000, // 15 phút
-    max: 100, // Giới hạn 100 request trong 15 phút của một IP,
+    max: 1000, // Giới hạn 1000 request trong 15 phút của một IP,
     message: 'Quá nhiều request từ IP của bạn, vui lòng thử lại sau 15 phút'
   })
 )
@@ -57,6 +58,7 @@ app.use('/payment', paymentRouter)
 app.use('/quizzes', quizzesRouter)
 app.use('/comments', commentsRouter)
 app.use('/posts', postsRouter)
+app.use('/progress', progressRouter)
 // Error handler xử lý tất cả các lỗi trong ứng dụng
 app.use(defaultErrorHandler)
 // Khởi động server

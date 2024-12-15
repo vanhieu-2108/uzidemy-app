@@ -277,3 +277,27 @@ export const changeStatusValidator = validate(
     ['params']
   )
 )
+
+export const getLectureByChapterValidator = validate(
+  checkSchema({
+    chapter_id: {
+      isMongoId: {
+        errorMessage: 'ID chương không hợp lệ'
+      },
+      custom: {
+        options: async (value) => {
+          const findChapter = await databaseService.chapters.findOne({
+            _id: new ObjectId(value)
+          })
+          if (!findChapter) {
+            throw new ErrorWithStatus({
+              message: 'Chương không tồn tại',
+              status: HTTP_STATUS.BAD_REQUEST
+            })
+          }
+          return true
+        }
+      }
+    }
+  })
+)

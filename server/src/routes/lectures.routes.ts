@@ -4,6 +4,7 @@ import {
   changeStatusValidator,
   createLectureValidator,
   deleteLessonValidator,
+  getLectureByChapterValidator,
   updateLectureValidator
 } from '~/middlewares/lectures.middlewares'
 import { accessTokenValidator } from '~/middlewares/users.middlewares'
@@ -65,7 +66,12 @@ lecturesRouter.get('/:lecture_id', accessTokenValidator, lecturesController.getL
  * [GET]: /lectures/chapter/:chapter_id
  */
 
-lecturesRouter.get('/chapter/:chapter_id', accessTokenValidator, lecturesController.getLecturesByChapter)
+lecturesRouter.get(
+  '/chapter/:chapter_id',
+  accessTokenValidator,
+  getLectureByChapterValidator,
+  lecturesController.getLecturesByChapter
+)
 
 /**
  * Route cập nhật một bài học đã hoàn thành

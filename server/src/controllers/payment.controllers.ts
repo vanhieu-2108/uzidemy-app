@@ -20,8 +20,8 @@ class PaymentController {
       amount: req.body.amount,
       orderCode,
       description: req.body.description || 'Thanh toán khóa học',
-      returnUrl: env === 'dev' ? `${envConfig.hostClient}/success` : '',
-      cancelUrl: env === 'dev' ? `${envConfig.hostClient}/cancel` : '',
+      returnUrl: env === 'dev' ? `${envConfig.hostClient}` : 'http://localhost:3000',
+      cancelUrl: env === 'dev' ? `${envConfig.hostClient}` : 'http://localhost:3000',
       expiredAt: expirationTimestamp
     }
     const paymentLink = await payos.createPaymentLink(order)

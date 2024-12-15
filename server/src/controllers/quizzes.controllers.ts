@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from 'express'
+import { TokenPayload } from '~/model/requests/User.requests'
 import quizzesService from '~/services/quizzes.services'
 
 class QuizzesController {
@@ -14,8 +15,14 @@ class QuizzesController {
     const result = await quizzesService.delete(req.params.quiz_id)
     res.json(result)
   }
-  async getAllQuizByLectureId(req: Request, res: Response, next: NextFunction) {
-    const result = await quizzesService.getAllQuizByLectureId(req.params.lecture_id)
+  async getAllQuizByChapterId(req: Request, res: Response, next: NextFunction) {
+    const { role } = req.decoded_access_token as TokenPayload
+    const result = await quizzesService.getAllQuizByChapterId(req.params.chapter_id, role)
+    res.json(result)
+  }
+
+  async getQuizById(req: Request, res: Response, next: NextFunction) {
+    const result = await quizzesService.getQuizById(req.params.quiz_id)
     res.json(result)
   }
 }

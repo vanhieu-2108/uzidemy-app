@@ -34,6 +34,7 @@ const envConfig = {
   dbCollectionQuizzes: process.env.DB_COLLECTION_QUIZZES as string,
   dbCollectionComments: process.env.DB_COLLECTION_COMMENTS as string,
   dbCollectionPosts: process.env.DB_COLLECTION_POSTS as string,
+  dbCollectionProgress: process.env.DB_COLLECTION_PROGRESS as string,
   emailSecret: process.env.EMAIL_SECRET as string,
   emailExpiresIn: process.env.EMAIL_EXPIRESIN as string,
   accessTokenSecret: process.env.ACCESSTOKEN_SECRET as string,

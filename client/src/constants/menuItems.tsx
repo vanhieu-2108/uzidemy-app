@@ -1,4 +1,4 @@
-import { IconBlog, IconBook, IconBookNote, IconPlay, IconProfile } from "@/components/icons";
+import { IconBlog, IconBook, IconBookNote, IconBox, IconPlay, IconProfile } from "@/components/icons";
 export const menuItems = [
   {
     url: "/",

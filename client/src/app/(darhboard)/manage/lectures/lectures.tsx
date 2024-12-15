@@ -9,8 +9,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 import useGetSearchParams from "@/hooks/useGetSearchParams";
-import { useGetLecturesByChapter, useUpdateLectureMutation } from "@/queries/useLecture";
+import { useDeleteLectureMutation, useGetLecturesByChapter, useUpdateLectureMutation } from "@/queries/useLecture";
 import { Fragment, useEffect, useRef, useState } from "react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
@@ -21,25 +33,29 @@ import coursesApi from "@/apiRequests/courses";
 import { toast } from "react-toastify";
 import { EntityError } from "@/lib/http";
 import { useRouter } from "next/navigation";
+import MDEditor from "@uiw/react-md-editor";
+import { Switch } from "@/components/ui/switch";
 
 const formSchema = z.object({
   slug: z.string().nonempty(),
   title: z.string().nonempty(),
   video_url: z.string().nonempty(),
   content: z.string().nonempty(),
+  _destroy: z.boolean().optional(),
 });
 
-export default function Page() {
+export default function Lectures() {
   const searchParams = useGetSearchParams();
   const router = useRouter();
   const { data, refetch } = useGetLecturesByChapter(searchParams.chapter_id);
-  const lectures = data?.payload.result;
+  const lectures = (data as any)?.payload?.result;
   const videoRef = useRef<HTMLInputElement>(null);
   const [file, setFile] = useState<File | null>(null);
   const [selectedLecture, setSelectedLecture] = useState<any | null>(null);
   const updateLectureMutation = useUpdateLectureMutation();
   const [isClient, setIsClient] = useState(false);
-
+  const [editor, setEditor] = useState("");
+  const deleteLectureMutation = useDeleteLectureMutation();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -102,6 +118,17 @@ export default function Page() {
       title: lecture.title,
       video_url: lecture.video_url,
       content: lecture.content,
+      _destroy: lecture._destroy,
+    });
+    setEditor(lecture.content);
+  }
+
+  function handleDeleteLecture(id: string) {
+    deleteLectureMutation.mutate(id, {
+      onSuccess: (data) => {
+        toast.success(data.payload.message);
+        refetch();
+      },
     });
   }
 
@@ -112,8 +139,9 @@ export default function Page() {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[200px]">Tiêu đề</TableHead>
-              <TableHead>Nội dung</TableHead>
+              <TableHead className="w-[250px]">Nội dung</TableHead>
               <TableHead>Đường dẫn</TableHead>
+              <TableHead>Trạng thái</TableHead>
               <TableHead>Hành động</TableHead>
             </TableRow>
           </TableHeader>
@@ -122,8 +150,19 @@ export default function Page() {
               lectures.map((lecture) => (
                 <TableRow key={lecture._id}>
                   <TableCell>{lecture.title}</TableCell>
-                  <TableCell>{lecture.content}</TableCell>
+                  <TableCell>{lecture.content.slice(0, 100) + "..."}</TableCell>
                   <TableCell>{lecture.slug}</TableCell>
+                  <TableCell>
+                    {!lecture._destroy ? (
+                      <span className="px-2 py-1 text-xs font-semibold text-green-600 bg-green-200 rounded-full">
+                        Active
+                      </span>
+                    ) : (
+                      <span className="px-2 py-1 text-xs font-semibold text-red-600 bg-red-200 rounded-full">
+                        Deleted
+                      </span>
+                    )}
+                  </TableCell>
                   <TableCell className="flex gap-2">
                     <Dialog
                       onOpenChange={(isOpen) => {
@@ -136,7 +175,7 @@ export default function Page() {
                       <DialogTrigger asChild>
                         <Button onClick={() => handleSelectLecture(lecture)}>Cập nhật</Button>
                       </DialogTrigger>
-                      <DialogContent className="h-[90%] overflow-y-auto">
+                      <DialogContent className="h-[90%] overflow-y-auto w-full max-w-[800px]">
                         <DialogHeader>
                           <DialogTitle>{lecture.title}</DialogTitle>
                           <DialogDescription>
@@ -226,7 +265,33 @@ export default function Page() {
                                     <FormItem>
                                       <FormLabel>Nội dung</FormLabel>
                                       <FormControl>
-                                        <Input placeholder="Enter content" {...field} />
+                                        <div>
+                                          <MDEditor
+                                            value={editor}
+                                            onChange={(value) => {
+                                              setEditor(value || "");
+                                              form.setValue("content", value || "");
+                                            }}
+                                          />
+                                          <MDEditor.Markdown
+                                            style={{ whiteSpace: "pre-wrap" }}
+                                            source={editor}
+                                            className="hidden"
+                                          />
+                                        </div>
+                                      </FormControl>
+                                      <FormMessage />
+                                    </FormItem>
+                                  )}
+                                />
+                                <FormField
+                                  control={form.control}
+                                  name="_destroy"
+                                  render={({ field }) => (
+                                    <FormItem className="flex flex-col">
+                                      <FormLabel>Trạng thái bài giảng</FormLabel>
+                                      <FormControl>
+                                        <Switch checked={Boolean(field.value)} onCheckedChange={field.onChange} />
                                       </FormControl>
                                       <FormMessage />
                                     </FormItem>
@@ -241,7 +306,25 @@ export default function Page() {
                         </DialogHeader>
                       </DialogContent>
                     </Dialog>
-                    <Button>Xóa</Button>
+                    <AlertDialog>
+                      <AlertDialogTrigger asChild>
+                        <Button>Xóa</Button>
+                      </AlertDialogTrigger>
+                      <AlertDialogContent>
+                        <AlertDialogHeader>
+                          <AlertDialogTitle>Bạn có chắc chắn muốn xóa {lecture?.title} không?</AlertDialogTitle>
+                          <AlertDialogDescription>
+                            Bạn có thể khôi phục lại bài giảng này sau khi xóa
+                          </AlertDialogDescription>
+                        </AlertDialogHeader>
+                        <AlertDialogFooter>
+                          <AlertDialogCancel>Hủy</AlertDialogCancel>
+                          <AlertDialogAction onClick={() => handleDeleteLecture(lecture._id)}>
+                            Tiếp tục
+                          </AlertDialogAction>
+                        </AlertDialogFooter>
+                      </AlertDialogContent>
+                    </AlertDialog>
                   </TableCell>
                 </TableRow>
               ))

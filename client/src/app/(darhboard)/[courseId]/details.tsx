@@ -26,10 +26,14 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import CoursesContent from "@/components/courses-content/CoursesContent";
+import { useGetCoursesContent } from "@/queries/useCourses";
 
 export default function Details({ course }: { course: Course }) {
   const [isClient, setIsClient] = useState(false);
+  const { data: resLecture } = useGetCoursesContent(course._id);
   const { user } = useAppProvider();
+  const coursesContent = resLecture?.payload.result;
   const router = useRouter();
   const createPaymentMutation = useCreatePayment();
   const body = {
@@ -55,6 +59,7 @@ export default function Details({ course }: { course: Course }) {
       <div className="w-full grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-6">
         <div>
           <Image
+            priority
             src={course.image}
             alt={course.title}
             width={800}
@@ -62,7 +67,8 @@ export default function Details({ course }: { course: Course }) {
             className="rounded-lg object-cover w-full"
           />
           <h1 className="mt-4 text-2xl md:text-4xl font-bold text-gray-800">{course.title}</h1>
-          <h2 className="mt-10 text-lg md:text-3xl font-bold text-gray-800">Nội dung khóa học</h2>
+          <h2 className="mt-10 text-lg md:text-3xl font-bold text-gray-800 mb-5">Nội dung khóa học</h2>
+          <CoursesContent coursesContent={coursesContent || []} isNavigation={false} />
           <Markdown className={"content"} rehypePlugins={[rehypeRaw, rehypeSanitize]} remarkPlugins={[remarkGfm]}>
             {course.description}
           </Markdown>
@@ -126,14 +132,14 @@ export default function Details({ course }: { course: Course }) {
                 <div className="text-center mb-4 md:mb-6">
                   {!user ? (
                     <Link href="/login">
-                      <button className="bg-gradient-to-r from-purple-500 to-yellow-500 text-white font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg w-full text-sm md:text-base">
+                      <div className="bg-gradient-to-r from-purple-500 to-yellow-500 text-white font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg w-full text-sm md:text-base">
                         Đăng nhập để mua
-                      </button>
+                      </div>
                     </Link>
                   ) : (
-                    <button className="bg-gradient-to-r from-purple-500 to-yellow-500 text-white font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg w-full text-sm md:text-base">
+                    <div className="bg-gradient-to-r from-purple-500 to-yellow-500 text-white font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg w-full text-sm md:text-base">
                       Mua ngay
-                    </button>
+                    </div>
                   )}
                 </div>
               </AlertDialogTrigger>

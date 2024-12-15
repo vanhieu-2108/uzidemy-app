@@ -8,7 +8,12 @@ import databaseService from '~/services/database.services'
 class LecturesService {
   async create(data: CreateLectureReqBody) {
     const mongoId = new ObjectId()
-    const findLastLecture = await databaseService.lectures.findOne({}, { sort: { created_at: -1 } })
+    const findLastLecture = await databaseService.lectures.findOne(
+      {
+        course_id: new ObjectId(data.course_id)
+      },
+      { sort: { created_at: -1 } }
+    )
     if (findLastLecture) {
       await databaseService.lectures.updateOne(
         {
@@ -150,6 +155,31 @@ class LecturesService {
     return {
       message: 'Lấy danh sách bài học thành công',
       result: lectures
+    }
+  }
+  async updateFinishLecture(lecture_id: string) {
+    const lecture = await databaseService.lectures.findOne({ _id: new ObjectId(lecture_id) })
+    if (!lecture) {
+      throw new ErrorWithStatus({
+        message: 'Không tìm thấy bài học',
+        status: HTTP_STATUS.NOT_FOUND
+      })
+    }
+    await databaseService.lectures.updateOne(
+      {
+        _id: new ObjectId(lecture_id)
+      },
+      {
+        $set: {
+          isWatched: true
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      }
+    )
+    return {
+      message: 'Cập nhật bài học đã hoàn thành thành công'
     }
   }
 }

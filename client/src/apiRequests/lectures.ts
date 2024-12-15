@@ -36,4 +36,5 @@ export const lectureApis = {
         }
       >
     >(`/lectures/${id}`, data),
+  deleteLecture: (id: string) => http.delete<Response<{ message: string }>>(`/lectures/${id}`),
 };

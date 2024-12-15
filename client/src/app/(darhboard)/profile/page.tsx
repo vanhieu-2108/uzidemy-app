@@ -11,12 +11,12 @@ import Image from "next/image";
 import banner from '../../../public/img1.avif';
 import { useRouter } from "next/navigation";
 import { AppProviderContext } from "@/components/app-provider";
+import { ToastContainer, toast } from "react-toastify";
 
 const formSchema = z.object({
   name: z.string().min(1, "Tên không được để trống"),
-  username: z.string().min(1, "Username không được để trống"),
   email: z.string().email("Email không hợp lệ"),
-  bio: z.string().optional(),
+  password: z.string().optional(),
 });
 type FormData = z.infer<typeof formSchema>;
 
@@ -27,105 +27,60 @@ export default function ProfilePage() {
   const form = useForm<FormData>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "Phước Vũ",
-      username: "phuocvu",
-      email: "phuocvu@example.com",
-      bio: "Đây là một bio mẫu.",
+      name: "",
+      email: "",
+      password: "",
     },
   });
 
   function onSubmit(values: FormData) {
     console.log(values);
-    // Phần xử lý cập nhật 
+   
   }
 
   return (
-    <div className="mx-auto p-6 bg-white rounded-lg relative">
-    
-      <Button type="submit" className="absolute top-4 right-4 px-7 py-7 bg-blue-500 text-white font-bold text-lg rounded-lg shadow-md hover:bg-blue-600">
-            Cập nhật 
-      </Button>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 mb-5">
-          <div className="flex flex-col sm:flex-row mt-16">
-            <div className="flex-1 pr-4 mb-4 sm:mb-0">
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Tên:</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Nhập tên của bạn..."
-                        {...field}
-                        className="p-6 border border-gray-300 rounded-lg"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="username"
-                render={({ field }) => (
-                  <FormItem className="mt-4">
-                    <FormLabel>Username:</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Nhập username..."
-                        {...field}
-                        className="p-6 border border-gray-300 rounded-lg"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            <div className="flex-1 pl-4">
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email:</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Nhập email của bạn..."
-                        {...field}
-                        className="p-6 border border-gray-300 rounded-lg"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="bio"
-                render={({ field }) => (
-                  <FormItem className="mt-4">
-                    <FormLabel>Bio:</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Nhập bio của bạn..."
-                        {...field}
-                        className="p-6 border border-gray-300 rounded-lg"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+    <div className="mx-auto p-6 bg-white rounded-lg shadow-lg max-w-4xl mt-10 relative">
+    <ToastContainer />
+    <button
+      type="button"
+      className="absolute top-2 right-2 px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none"
+      onClick={form.handleSubmit(onSubmit)}
+    >
+      Cập nhật
+    </button>
+    <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
+      <div className="flex flex-col sm:flex-row gap-6">
+        {/* Form Inputs */}
+        <div className="flex-1">
+          <div className="mb-4">
+            <label className="block text-lg font-medium text-gray-700">Tên</label>
+            <input
+              {...form.register("name")}
+              placeholder="Nhập tên của bạn..."
+              className="w-full p-4 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
           </div>
-
-        
-        </form>
-      </Form>
-    </div>
+          <div className="mb-4">
+            <label className="block text-lg font-medium text-gray-700">Email</label>
+            <input
+              {...form.register("email")}
+              placeholder="Nhập email của bạn..."
+              className="w-full p-4 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-lg font-medium text-gray-700">Mật khẩu</label>
+            <input
+              type="password"
+              {...form.register("password")}
+              placeholder="Nhập mật khẩu của bạn..."
+              className="w-full p-4 mt-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  
   );
 }

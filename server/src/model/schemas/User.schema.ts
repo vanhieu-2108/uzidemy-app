@@ -7,11 +7,17 @@ export enum EVerifyUser {
   BANNED // Bị khóa
 }
 
+export enum EStatusUser {
+  ACTIVE = 'ACTIVE',
+  DELETED = 'DELETED'
+}
+
 export interface IUser {
   _id?: ObjectId
   email: string
   fullname: string
   password: string
+  status?: EStatusUser
   verify?: EVerifyUser
   courses?: ObjectId[]
   role?: ERole
@@ -26,6 +32,7 @@ export default class User {
   email: string
   fullname: string
   password: string
+  status?: EStatusUser
   verify?: EVerifyUser
   courses?: ObjectId[]
   role?: ERole
@@ -40,6 +47,7 @@ export default class User {
     fullname,
     password,
     verify,
+    status,
     courses,
     role,
     email_verify_token,
@@ -53,6 +61,7 @@ export default class User {
     this.email = email
     this.fullname = fullname
     this.password = password
+    this.status = status || EStatusUser.ACTIVE
     this.verify = verify || EVerifyUser.UNVERIFY
     this.courses = courses || []
     this.role = role || ERole.USER

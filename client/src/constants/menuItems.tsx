@@ -1,4 +1,5 @@
 import { IconBlog, IconBook, IconBookNote, IconBox, IconPlay, IconProfile } from "@/components/icons";
+import IconUser from "@/components/icons/icon-user";
 export const menuItems = [
   {
     url: "/",
@@ -29,6 +30,13 @@ export const menuItems = [
     title: "Quản lý khóa học",
     isPublic: false,
     icon: <IconBookNote className="size-5" />,
+    isAdmin: true,
+  },
+  {
+    url: "/manage/users",
+    title: "Quản lý người dùng",
+    isPublic: false,
+    icon: <IconUser className="size-5" />,
     isAdmin: true,
   },
 ];

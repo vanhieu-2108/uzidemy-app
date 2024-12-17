@@ -326,15 +326,11 @@ export const updateMeValidator = validate(
             max: 400
           },
           errorMessage: 'Avatar phải từ 0 đến 400 ký tự'
-        },
-        custom: {
-          options: (value) => {
-            if (value) {
-              const regex = /(http(s?):)([/|.|\w|\s|-])*\.(?:jpg|gif|png)/
-              if (!regex.test(value)) throw new Error('Avatar không đúng định dạng')
-            }
-            return true
-          }
+        }
+      },
+      email: {
+        isEmail: {
+          errorMessage: 'Email không đúng định dạng'
         }
       }
     },
@@ -349,14 +345,14 @@ export const changePasswordValidator = validate(
           errorMessage: 'Mật khẩu cũ không được để trống'
         },
         isLength: {
-          options: {
-            min: 6,
-            max: 100
-          },
+          options: { min: 6, max: 100 },
           errorMessage: 'Mật khẩu cũ phải từ 6 đến 100 ký tự'
         },
         custom: {
           options: async (value, { req }) => {
+            if (!value || typeof value !== 'string') {
+              throw new Error('Mật khẩu cũ không hợp lệ')
+            }
             const { user_id } = (req as Request).decoded_access_token as TokenPayload
             const user = (await usersServices.getUserById(user_id)) as WithId<User>
             const compare = await verifyPassword(value, user.password)

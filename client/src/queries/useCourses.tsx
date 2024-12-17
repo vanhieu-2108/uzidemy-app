@@ -64,3 +64,10 @@ export const useGetCoursesContent = (id: string) => {
     queryFn: () => coursesApi.getContentCourses(id),
   });
 };
+
+export const useGetCoursePurchase = () => {
+  return useQuery({
+    queryKey: ["coursePurchase"],
+    queryFn: coursesApi.getCoursePurchased,
+  });
+};

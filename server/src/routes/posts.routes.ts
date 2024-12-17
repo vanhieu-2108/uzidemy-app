@@ -49,7 +49,13 @@ postsRouter.delete('/:post_id', accessTokenValidator, deletePostValidator, wrapH
  * /posts
  */
 
-postsRouter.get('', wrapHandler(postsControllers.getPosts))
+postsRouter.get('', accessTokenValidator, wrapHandler(postsControllers.getPosts))
+
+/**
+ * [GET] Lấy danh sách bài viết theo user_id
+ */
+
+postsRouter.get('/user/:user_id', accessTokenValidator, wrapHandler(postsControllers.getPostsByUserId))
 
 /**
  * [GET] Lấy chi tiết bài viết

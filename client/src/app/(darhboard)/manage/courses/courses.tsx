@@ -88,9 +88,9 @@ export default function Courses({ data }: { data: Course[] }) {
               <TableCell>{formatVND(course.sale_price)}</TableCell>
               <TableCell className="text-right">
                 <div className="flex justify-end gap-2">
-                  <button title="Xem chi tiết">
+                  <Link href={`/${course.slug}`}>
                     <IconEye className="w-5 h-5" />
-                  </button>
+                  </Link>
                   <Link href={`/manage/courses/edit/${course.slug}`} title="Chỉnh sửa">
                     <IconPen className="w-5 h-5" />
                   </Link>

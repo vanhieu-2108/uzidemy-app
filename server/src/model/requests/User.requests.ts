@@ -1,5 +1,6 @@
 import { JwtPayload } from 'jsonwebtoken'
 import { ERole } from '~/constants/enums'
+import { EStatusUser } from '~/model/schemas/User.schema'
 
 export interface RegisterReqBody {
   email: string
@@ -16,6 +17,8 @@ export interface LoginReqBody {
 export interface UpdateMeReqBody {
   fullname: string
   avatar?: string
+  email: string
+  status: EStatusUser
 }
 
 export interface TokenPayload extends JwtPayload {

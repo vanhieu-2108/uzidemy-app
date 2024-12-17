@@ -1,5 +1,9 @@
 import { ROLE } from "@/constants/enum";
-import { Response } from "@/types/res";
+
+export enum EStatusUser {
+  ACTIVE = "ACTIVE",
+  DEACTIVE = "DEACTIVE",
+}
 
 export interface Account {
   _id: string;
@@ -10,6 +14,8 @@ export interface Account {
   created_at: string;
   updated_at: string;
   verify: number;
+  status: EStatusUser;
+  courses: string[];
 }
 
 export interface ResponseLogin {

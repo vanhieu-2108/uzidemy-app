@@ -25,18 +25,23 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useEffect, useState } from "react";
+import CoursesContent from "@/components/courses-content/CoursesContent";
+import { useGetCoursesContent } from "@/queries/useCourses";
 
 export default function Details({ course }: { course: Course }) {
   const [isClient, setIsClient] = useState(false);
+  const { data: resLecture } = useGetCoursesContent(course._id);
   const { user } = useAppProvider();
+  const coursesContent = resLecture?.payload.result;
   const router = useRouter();
   const createPaymentMutation = useCreatePayment();
   const body = {
     amount: course.sale_price,
     description: `Mua khóa học tại Uzidemy`,
-    course_id: "673ca8c9cfe3b26f3e8b3d94",
+    course_id: course._id, // Đảm bảo course_id là ID của khóa học hiện tại
     user_id: user?._id,
   };
+
   const handlePayment = () => {
     createPaymentMutation.mutate(body, {
       onSuccess: (data) => {
@@ -49,11 +54,15 @@ export default function Details({ course }: { course: Course }) {
     setIsClient(true);
   }, []);
 
+  // Kiểm tra xem khóa học có trong courses của người dùng hay không
+  const isCoursePurchased = user?.courses?.includes(course._id);
+
   return (
     <div className=" text-white py-4 flex items-center justify-between">
       <div className="w-full grid grid-cols-1 md:grid-cols-[2fr,1fr] gap-6">
         <div>
           <Image
+            priority
             src={course.image}
             alt={course.title}
             width={800}
@@ -61,7 +70,8 @@ export default function Details({ course }: { course: Course }) {
             className="rounded-lg object-cover w-full"
           />
           <h1 className="mt-4 text-2xl md:text-4xl font-bold text-gray-800">{course.title}</h1>
-          <h2 className="mt-10 text-lg md:text-3xl font-bold text-gray-800">Nội dung khóa học</h2>
+          <h2 className="mt-10 text-lg md:text-3xl font-bold text-gray-800 mb-5">Nội dung khóa học</h2>
+          <CoursesContent coursesContent={coursesContent || []} isNavigation={false} />
           <Markdown className={"content"} rehypePlugins={[rehypeRaw, rehypeSanitize]} remarkPlugins={[remarkGfm]}>
             {course.description}
           </Markdown>
@@ -121,13 +131,24 @@ export default function Details({ course }: { course: Course }) {
           </div>
           {isClient && (
             <AlertDialog>
-              <AlertDialogTrigger>
+              {/* Điều kiện kiểm tra khóa học đã mua */}
+              {isCoursePurchased ? (
                 <div className="text-center mb-4 md:mb-6">
-                  <button className="bg-gradient-to-r from-purple-500 to-yellow-500 text-white font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg w-full text-sm md:text-base">
-                    Mua ngay
-                  </button>
+                  <div className="bg-gray-300 text-gray-500 font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg w-full text-sm md:text-base cursor-not-allowed">
+                    Bạn đã mua khóa học này
+                  </div>
                 </div>
-              </AlertDialogTrigger>
+              ) : (
+                <AlertDialogTrigger>
+                  <div className="text-center mb-4 md:mb-6">
+                    <div className="bg-gradient-to-r from-purple-500 to-yellow-500 text-white font-bold py-2 px-6 md:py-3 md:px-8 rounded-lg w-full text-sm md:text-base cursor-pointer">
+                      Mua ngay
+                    </div>
+                  </div>
+                </AlertDialogTrigger>
+              )}
+
+              {/* Dialog content */}
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Xác nhận đơn hàng</AlertDialogTitle>

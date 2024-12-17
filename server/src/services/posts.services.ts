@@ -1,4 +1,5 @@
 import { ObjectId, WithId } from 'mongodb'
+import { EPostStatus, ERole } from '~/constants/enums'
 import { ErrorWithStatus } from '~/model/Errors'
 import { AddPostReqBody } from '~/model/requests/Post.requests'
 import Post from '~/model/schemas/Post.schema'
@@ -38,7 +39,7 @@ class PostsService {
       { _id: new ObjectId(post_id) },
       {
         $set: {
-          _destroy: true
+          status: EPostStatus.DELETED
         },
         $currentDate: {
           updated_at: true
@@ -49,17 +50,74 @@ class PostsService {
       message: 'Xóa bài viết thành công'
     }
   }
-  async getPosts(isAll: boolean = false) {
+  async getPosts(role: string) {
     let result
-    if (isAll) {
-      result = await databaseService.posts.find().toArray()
+
+    if (role === ERole.ADMIN) {
+      result = await databaseService.posts
+        .aggregate([
+          {
+            $lookup: {
+              from: 'users', // Collection cần lookup
+              localField: 'user_id', // Trường trong collection posts
+              foreignField: '_id', // Trường trong collection users
+              as: 'user' // Kết quả lookup sẽ lưu vào trường user
+            }
+          },
+          {
+            $unwind: {
+              path: '$user', // Giải nén mảng user
+              preserveNullAndEmptyArrays: true // Giữ bài viết dù không có user khớp
+            }
+          },
+          {
+            $project: {
+              title: 1,
+              content: 1,
+              image: 1,
+              author: 1,
+              created_at: 1,
+              user: {
+                avatar: 1
+              }
+            }
+          }
+        ])
+        .toArray()
     } else {
       result = await databaseService.posts
-        .find({
-          _destroy: {
-            $ne: true
+        .aggregate([
+          {
+            $match: {
+              status: EPostStatus.PUBLIC // Lọc bài viết chỉ lấy PUBLIC
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'user_id',
+              foreignField: '_id',
+              as: 'user'
+            }
+          },
+          {
+            $unwind: {
+              path: '$user',
+              preserveNullAndEmptyArrays: true
+            }
+          },
+          {
+            $project: {
+              title: 1,
+              content: 1,
+              image: 1,
+              author: 1,
+              user: {
+                avatar: 1
+              }
+            }
           }
-        })
+        ])
         .toArray()
     }
 
@@ -83,12 +141,30 @@ class PostsService {
       },
       {
         $set: {
-          _destroy: !post._destroy
+          status: EPostStatus.PUBLIC
         }
       }
     )
     return {
       message: 'Đổi trạng thái bài viết thành công'
+    }
+  }
+
+  async getPostsByUserId(user_id: string) {
+    const findUser = await databaseService.users.findOne({
+      _id: new ObjectId(user_id)
+    })
+    if (!findUser) {
+      throw new Error('Người dùng không tồn tại')
+    }
+    const result = await databaseService.posts
+      .find({
+        user_id: new ObjectId(user_id)
+      })
+      .toArray()
+    return {
+      message: 'Lấy danh sách bài viết theo người dùng thành công.',
+      result
     }
   }
 }

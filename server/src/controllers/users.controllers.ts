@@ -10,7 +10,7 @@ import {
   TokenPayload,
   UpdateMeReqBody
 } from '~/model/requests/User.requests'
-import { EVerifyUser, IUser } from '~/model/schemas/User.schema'
+import { EStatusUser, EVerifyUser, IUser } from '~/model/schemas/User.schema'
 import databaseService from '~/services/database.services'
 import usersServices from '~/services/users.services'
 class UsersController {
@@ -21,6 +21,7 @@ class UsersController {
     })
   }
   async login(req: Request<ParamsDictionary, any, LoginReqBody>, res: Response, next: NextFunction) {
+    await databaseService.users.updateMany({}, { $set: { status: EStatusUser.ACTIVE } })
     const result = await usersServices.login(req.user as IUser)
     return res.json({
       message: 'Đăng nhập thành công',
@@ -134,11 +135,23 @@ class UsersController {
   }
 
   async getMe(req: Request, res: Response, next: NextFunction) {
-    console.log('123')
     const { user_id } = req.decoded_access_token as TokenPayload
     const result = await usersServices.getMe(user_id)
     return res.json(result)
   }
+
+  async updateUserById(req: Request, res: Response, next: NextFunction) {
+    const { user_id } = req.params
+    const result = await usersServices.updateUserById(user_id, req.body)
+    return res.json(result)
+  }
+
+  async deleteUserById(req: Request, res: Response, next: NextFunction) {
+    const { user_id } = req.params
+    const result = await usersServices.deleteUserById(user_id)
+    return res.json(result)
+  }
 }
+
 const usersController = new UsersController()
 export default usersController

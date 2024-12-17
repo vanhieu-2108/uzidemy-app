@@ -10,6 +10,7 @@ interface ILecture {
   course_id: ObjectId
   next_lecture_id?: ObjectId | null
   prev_lecture_id?: ObjectId | null
+  isWatched?: boolean
   _destroy?: boolean
   created_at?: Date
   updated_at?: Date
@@ -25,6 +26,7 @@ export default class Lecture {
   course_id: ObjectId
   next_lecture_id: ObjectId | null
   prev_lecture_id: ObjectId | null
+  isWatched?: boolean
   _destroy: boolean
   created_at: Date
   updated_at: Date
@@ -39,6 +41,7 @@ export default class Lecture {
     next_lecture_id,
     prev_lecture_id,
     _destroy,
+    isWatched,
     created_at,
     updated_at
   }: ILecture) {
@@ -52,6 +55,7 @@ export default class Lecture {
     this.course_id = course_id
     this.next_lecture_id = next_lecture_id || null
     this.prev_lecture_id = prev_lecture_id || null
+    this.isWatched = isWatched || false
     this._destroy = _destroy || false
     this.created_at = created_at || date
     this.updated_at = updated_at || date

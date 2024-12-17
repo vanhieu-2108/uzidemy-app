@@ -6,4 +6,5 @@ export interface Lecture {
   content: string;
   course_id: string;
   chapter_id: string;
+  _destroy?: boolean;
 }

@@ -25,6 +25,15 @@ class LecturesController {
     const result = await lectureService.getLecture(req.params.lecture_id)
     res.json(result)
   }
+  async getLecturesByChapter(req: Request<ParamsDictionary, any, any>, res: Response, next: NextFunction) {
+    const result = await lectureService.getLecturesByChapter(req.params.chapter_id)
+    res.json(result)
+  }
+
+  async updateFinishLecture(req: Request<ParamsDictionary, any, any>, res: Response, next: NextFunction) {
+    const result = await lectureService.updateFinishLecture(req.params.lecture_id)
+    res.json(result)
+  }
 }
 
 const lecturesController = new LecturesController()

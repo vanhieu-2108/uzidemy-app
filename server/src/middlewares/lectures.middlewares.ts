@@ -105,9 +105,9 @@ export const updateLectureValidator = validate(
             const findLecture = await databaseService.lectures.findOne({
               slug: value
             })
-            if (findLecture) {
+            if (!findLecture) {
               throw new ErrorWithStatus({
-                message: 'Đường dẫn bài học đã tồn tại',
+                message: 'Bài học không tồn tại',
                 status: HTTP_STATUS.BAD_REQUEST
               })
             }
@@ -202,7 +202,7 @@ export const updateLectureValidator = validate(
         }
       }
     },
-    ['body']
+    ['body', 'params']
   )
 )
 
@@ -276,4 +276,28 @@ export const changeStatusValidator = validate(
     },
     ['params']
   )
+)
+
+export const getLectureByChapterValidator = validate(
+  checkSchema({
+    chapter_id: {
+      isMongoId: {
+        errorMessage: 'ID chương không hợp lệ'
+      },
+      custom: {
+        options: async (value) => {
+          const findChapter = await databaseService.chapters.findOne({
+            _id: new ObjectId(value)
+          })
+          if (!findChapter) {
+            throw new ErrorWithStatus({
+              message: 'Chương không tồn tại',
+              status: HTTP_STATUS.BAD_REQUEST
+            })
+          }
+          return true
+        }
+      }
+    }
+  })
 )

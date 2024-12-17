@@ -14,6 +14,7 @@ import MDEditor from "@uiw/react-md-editor";
 import { useCreateLecture } from "@/queries/useLecture";
 import coursesApi from "@/apiRequests/courses";
 import { toast } from "react-toastify";
+import Link from "next/link";
 
 const formSchema = z.object({
   slug: z.string({ required_error: "Slug không được để trống" }),
@@ -148,14 +149,23 @@ function Page() {
                     </Button>
                   </div>
                 ) : (
-                  <div className="flex justify-end mr-4 w-max">
+                  <div className="flex justify-end mr-4 w-max gap-2">
                     <Button
                       onClick={() => {
                         setEditChapter(chapter._id || "");
                       }}
                     >
-                      Thêm
+                      Thêm bài giảng
                     </Button>
+                    <Link href={`/manage/lectures?chapter_id=${chapter._id}`}>
+                      <Button>Danh sách bài giảng</Button>
+                    </Link>
+                    <Link href={`/manage/quizzes?chapter_id=${chapter._id}`}>
+                      <Button>Thêm quiz</Button>
+                    </Link>
+                    <Link href={`/manage/quizzes/list?chapter_id=${chapter._id}`}>
+                      <Button>Danh sách quiz</Button>
+                    </Link>
                   </div>
                 )}
               </div>

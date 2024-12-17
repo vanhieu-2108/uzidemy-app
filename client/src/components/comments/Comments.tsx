@@ -25,6 +25,7 @@ export default function Comments({ id }: { id: string }) {
         scriptElement.setAttribute("theme", "github-light");
         scriptElement.setAttribute("issue-term", "url");
         scriptElement.setAttribute("repo", "vanhieu-2108/ucademy-app");
+        scriptElement.setAttribute("async", "true");
 
         // Gắn script vào ref
         element.appendChild(scriptElement);

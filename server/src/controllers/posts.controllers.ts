@@ -23,7 +23,8 @@ class PostsControllers {
   }
 
   async getPosts(req: Request, res: Response, next: NextFunction) {
-    const result = await postsService.getPosts(true)
+    const { role } = req.decoded_access_token as TokenPayload
+    const result = await postsService.getPosts(role)
     res.json(result)
   }
   async getPost(req: Request, res: Response, next: NextFunction) {
@@ -35,6 +36,12 @@ class PostsControllers {
   async togglePost(req: Request, res: Response, next: NextFunction) {
     const post_id = req.params.post_id
     const result = await postsService.togglePost(post_id, req.post as Post)
+    res.json(result)
+  }
+
+  async getPostsByUserId(req: Request, res: Response, next: NextFunction) {
+    const user_id = req.params.user_id
+    const result = await postsService.getPostsByUserId(user_id)
     res.json(result)
   }
 }

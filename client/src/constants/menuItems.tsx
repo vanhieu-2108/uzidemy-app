@@ -1,5 +1,12 @@
-import { IconBlog, IconBook, IconBookNote, IconBox, IconPlay, IconProfile } from "@/components/icons";
-import IconUser from "@/components/icons/icon-user";
+import {
+  IconBlog,
+  IconBook,
+  IconBookNote,
+  IconBookOpen,
+  IconPlay,
+  IconProfile,
+  IconUserGroup,
+} from "@/components/icons";
 export const menuItems = [
   {
     url: "/",
@@ -36,7 +43,14 @@ export const menuItems = [
     url: "/manage/users",
     title: "Quản lý người dùng",
     isPublic: false,
-    icon: <IconUser className="size-5" />,
+    icon: <IconUserGroup className="size-5" />,
+    isAdmin: true,
+  },
+  {
+    url: "/manage/posts",
+    title: "Quản lý bài viết",
+    isPublic: false,
+    icon: <IconBookOpen className="size-5" />,
     isAdmin: true,
   },
 ];

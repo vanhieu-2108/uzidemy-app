@@ -18,7 +18,7 @@ const nextConfig = {
         protocol: "http",
         hostname: "localhost",
         port: "4000",
-        pathname: "/static/images/**",
+        pathname: "/**",
       },
       {
         protocol: "https",
@@ -29,6 +29,12 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "github.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "api.uzidemy.io.vn",
         port: "",
         pathname: "/**",
       },

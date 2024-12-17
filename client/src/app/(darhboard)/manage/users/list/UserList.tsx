@@ -58,7 +58,7 @@ export default function UserList() {
                   src={Boolean(user.avatar) ? user.avatar : "https://github.com/shadcn.png"}
                   width={100}
                   height={100}
-                  className="rounded-sm"
+                  className="rounded-sm w-[100px] h-[100px] object-cover"
                 />
               </TableCell>
               <TableCell>{user.email}</TableCell>

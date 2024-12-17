@@ -43,6 +43,7 @@ const coursesApi = {
       cache: "no-store",
     }),
   getContentCourses: (id: string) => http.get<Response<CoursesContent[]>>(`/courses/${id}/content`),
+  getCoursePurchased: () => http.get<Response<any>>("/courses/purchased"),
 };
 
 export default coursesApi;

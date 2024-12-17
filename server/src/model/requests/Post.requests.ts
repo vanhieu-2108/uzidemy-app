@@ -1,3 +1,5 @@
+import { EPostStatus } from '~/constants/enums'
+
 export interface AddPostReqBody {
   title: string
   content: string

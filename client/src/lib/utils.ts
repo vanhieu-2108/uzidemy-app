@@ -18,6 +18,8 @@ export const setAccessTokenToLocalStorage = (accessToken: string) =>
 export const setRefreshTokenToLocalStorage = (refreshToken: string) =>
   isBrowser && localStorage.setItem("refresh_token", refreshToken);
 
+export const setUserToLocalStorage = (user: any) => isBrowser && localStorage.setItem("user", JSON.stringify(user));
+
 export const removeTokensFromLocalStorage = () => {
   isBrowser && localStorage.removeItem("access_token");
   isBrowser && localStorage.removeItem("refresh_token");

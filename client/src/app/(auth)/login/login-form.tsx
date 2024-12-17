@@ -109,7 +109,7 @@ export default function LoginForm() {
 
               <Button
                 type="submit"
-                className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:bg-gray-300"
+                className="w-full bg-black text-white p-2 rounded-lg mb-6  hover:text-black hover:border hover:bg-gray-300"
               >
                 Đăng Nhập
               </Button>

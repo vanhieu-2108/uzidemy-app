@@ -184,6 +184,70 @@ class CourseServices {
       .toArray()
     return result[0]
   }
+
+  async getPurchasedCourses(user_id: string) {
+    const result = await databaseService.orders
+      .aggregate([
+        {
+          $match: {
+            status: 'SUCCESS',
+            user_id: new ObjectId(user_id) // Ensure user_id is a valid ObjectId
+          }
+        },
+        {
+          $lookup: {
+            from: 'courses',
+            localField: 'course_id',
+            foreignField: '_id',
+            as: 'course'
+          }
+        },
+        {
+          $unwind: '$course' // Unwind the course array to get a single course
+        },
+        {
+          $lookup: {
+            from: 'chapters',
+            localField: 'course._id', // Link chapters to course's _id
+            foreignField: 'course_id',
+            as: 'chapters' // Add the chapters data under the 'chapters' key
+          }
+        },
+        {
+          $unwind: {
+            path: '$chapters', // Unwind the chapters array
+            preserveNullAndEmptyArrays: true // Preserve entries without chapters
+          }
+        },
+        {
+          $lookup: {
+            from: 'lectures',
+            localField: 'chapters._id', // Link lectures to chapter's _id
+            foreignField: 'chapter_id', // Assuming lectures has a chapter_id field
+            as: 'chapters.lectures' // Embed lectures inside the chapters array
+          }
+        },
+        {
+          $group: {
+            _id: '$_id',
+            user_id: { $first: '$user_id' },
+            course: { $first: '$course' },
+            chapters: { $push: '$chapters' } // Re-group chapters after unwinding them
+          }
+        },
+        {
+          $project: {
+            _id: 1,
+            user_id: 1,
+            course: 1,
+            chapters: 1 // Include chapters with nested lectures
+          }
+        }
+      ])
+      .toArray()
+
+    return result
+  }
 }
 
 const coursesServices = new CourseServices()

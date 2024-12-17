@@ -5,6 +5,7 @@ import Course from '~/model/schemas/Course.schema'
 import Lecture from '~/model/schemas/Lecture.schema'
 import Order from '~/model/schemas/Order.schema'
 import Post from '~/model/schemas/Post.schema'
+import Progress from '~/model/schemas/Progress.schema'
 import Quiz from '~/model/schemas/Quiz.schema'
 import RefreshToken from '~/model/schemas/RefreshToken.schema'
 import User from '~/model/schemas/User.schema'
@@ -55,6 +56,10 @@ class DatabaseService {
 
   get posts(): Collection<Post> {
     return this.db.collection(envConfig.dbCollectionPosts)
+  }
+
+  get progress(): Collection<Progress> {
+    return this.db.collection(envConfig.dbCollectionProgress)
   }
 }
 

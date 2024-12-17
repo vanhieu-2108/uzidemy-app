@@ -17,6 +17,7 @@ import { useLogout } from "@/queries/useAccount";
 import { removeTokensFromLocalStorage } from "@/lib/utils";
 import IconUser from "@/components/icons/icon-user";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 
 export default function Header() {
   const { user, setUser } = useContext(AppProviderContext);
@@ -50,7 +51,13 @@ export default function Header() {
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar className="w-10 h-10 rounded-full">
-                <AvatarImage src={"https://github.com/shadcn.png"} alt="User Avatar" />
+                <Image
+                  src={Boolean(user.avatar) ? user.avatar : "https://github.com/shadcn.png"}
+                  alt="avatar"
+                  className="rounded-full w-30 h-30 object-cover"
+                  width={100}
+                  height={100}
+                />
                 <AvatarFallback>{user.fullname.slice(0, 3)}</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>

@@ -52,11 +52,75 @@ class PostsService {
   }
   async getPosts(role: string) {
     let result
+
     if (role === ERole.ADMIN) {
-      result = await databaseService.posts.find({}).toArray()
+      result = await databaseService.posts
+        .aggregate([
+          {
+            $lookup: {
+              from: 'users', // Collection cần lookup
+              localField: 'user_id', // Trường trong collection posts
+              foreignField: '_id', // Trường trong collection users
+              as: 'user' // Kết quả lookup sẽ lưu vào trường user
+            }
+          },
+          {
+            $unwind: {
+              path: '$user', // Giải nén mảng user
+              preserveNullAndEmptyArrays: true // Giữ bài viết dù không có user khớp
+            }
+          },
+          {
+            $project: {
+              title: 1,
+              content: 1,
+              image: 1,
+              author: 1,
+              created_at: 1,
+              user: {
+                avatar: 1
+              }
+            }
+          }
+        ])
+        .toArray()
     } else {
-      result = await databaseService.posts.find({ status: EPostStatus.PUBLIC }).toArray()
+      result = await databaseService.posts
+        .aggregate([
+          {
+            $match: {
+              status: EPostStatus.PUBLIC // Lọc bài viết chỉ lấy PUBLIC
+            }
+          },
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'user_id',
+              foreignField: '_id',
+              as: 'user'
+            }
+          },
+          {
+            $unwind: {
+              path: '$user',
+              preserveNullAndEmptyArrays: true
+            }
+          },
+          {
+            $project: {
+              title: 1,
+              content: 1,
+              image: 1,
+              author: 1,
+              user: {
+                avatar: 1
+              }
+            }
+          }
+        ])
+        .toArray()
     }
+
     return {
       message: 'Lấy danh sách bài viết thành công',
       result

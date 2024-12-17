@@ -14,5 +14,8 @@ export interface Post {
   status: EPostStatus;
   created_at: string;
   updated_at: string;
+  user: {
+    avatar: string;
+  };
   _destroy: boolean;
 }

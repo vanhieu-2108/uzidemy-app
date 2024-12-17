@@ -187,6 +187,8 @@ export default function Page() {
                     toolbar:
                       "undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat",
                   }}
+                  value={field.value}
+                  onEditorChange={(content) => form.setValue("content", content)}
                 />
               </FormControl>
               <FormMessage />

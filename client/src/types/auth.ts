@@ -15,6 +15,7 @@ export interface Account {
   updated_at: string;
   verify: number;
   status: EStatusUser;
+  courses: string[];
 }
 
 export interface ResponseLogin {

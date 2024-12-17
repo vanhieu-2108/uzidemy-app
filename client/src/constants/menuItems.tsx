@@ -30,7 +30,7 @@ export const menuItems = [
     url: "/blog",
     title: "Bài viết",
     icon: <IconBlog className="size-5" />,
-    isPublic: true,
+    isPublic: false,
   },
   {
     url: "/manage/courses",
@@ -47,7 +47,7 @@ export const menuItems = [
     isAdmin: true,
   },
   {
-    url: "/manage/posts",
+    url: "/manage/",
     title: "Quản lý bài viết",
     isPublic: false,
     icon: <IconBookOpen className="size-5" />,

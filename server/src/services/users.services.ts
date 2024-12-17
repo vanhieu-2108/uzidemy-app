@@ -51,7 +51,8 @@ class UsersServices {
         avatar: user.avatar,
         createdAt: user.created_at,
         updatedAt: user.updated_at,
-        verify: user.verify
+        verify: user.verify,
+        courses: user.courses
       }
     }
   }

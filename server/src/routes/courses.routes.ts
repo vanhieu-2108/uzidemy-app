@@ -11,6 +11,7 @@ import { accessTokenValidator, isAdminValidator } from '~/middlewares/users.midd
 import { wrapHandler } from '~/utils/wrapHandler'
 
 const coursesRouter = Router()
+
 /**
  * Route tạo khóa học
  * [POST]: /courses

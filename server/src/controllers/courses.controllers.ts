@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import { ObjectId } from 'mongodb'
+import { TokenPayload } from '~/model/requests/User.requests'
 import coursesServices from '~/services/courses.services'
 import databaseService from '~/services/database.services'
 class CoursesController {
@@ -92,6 +93,15 @@ class CoursesController {
       .toArray()
     return res.json({
       message: 'Lấy thông tin khóa học thành công',
+      result
+    })
+  }
+
+  async getPurchasedCourses(req: Request, res: Response, next: NextFunction) {
+    const { user_id } = req.decoded_access_token as TokenPayload
+    const result = await coursesServices.getPurchasedCourses(user_id)
+    return res.json({
+      message: 'Lấy danh sách khóa học đã mua thành công',
       result
     })
   }

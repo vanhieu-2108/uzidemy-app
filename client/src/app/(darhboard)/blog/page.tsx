@@ -11,17 +11,17 @@ export default function BlogPage() {
   return (
     <div className="py-12">
       <h1 className="text-4xl font-bold mb-8">Danh sách bài viết</h1>
-      <div className="grid gap-8">
+      <div className="grid gap-8 grid-cols-1 lg:grid-cols-2">
         {posts &&
           posts.length > 0 &&
           posts.map((post) => (
             <Link href={`/blog/${post._id}`} key={post._id}>
-              <div className="col-span-2 space-y-8">
+              <div className="space-y-8">
                 <div className="bg-white rounded-lg shadow-md overflow-hidden flex cursor-pointer">
                   <div className="p-4 flex-grow">
                     <div className="flex items-center mb-2">
                       <Image
-                        src={post.image}
+                        src={post.user.avatar}
                         alt={post.title}
                         width={40}
                         height={40}
@@ -32,11 +32,7 @@ export default function BlogPage() {
                         <p className="text-xs text-gray-500">{timeAgo(post.created_at)}</p>
                       </div>
                     </div>
-                    <h3 className="font-semibold text-xl">{post.title}</h3>
-                    <p className="text-sm text-gray-700 mt-2">
-                      Xin chào mọi người mình là Lý Cao Nguyên, mình đã làm một dự án website front-end với hơn 100 bài
-                      học và 200 bài viết...
-                    </p>
+                    <h3 className="font-semibold text-xl mt-5">{post.title}</h3>
                   </div>
                   <div className="w-1/5">
                     <Image src={post.image} alt={post.title} width={100} height={100} className="w-full h-full" />

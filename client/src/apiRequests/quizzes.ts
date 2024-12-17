@@ -21,6 +21,22 @@ const quizzesApi = {
         message: string;
       }>
     >(`/quizzes/${quizId}`),
+  checkAnswerForQuiz(body: any) {
+    return http.post<
+      Response<{
+        message: string;
+        isCorrect: boolean;
+      }>
+    >("/quizzes/answer", body);
+  },
+  getQuizzesByLectureId: (lectureId: string) => http.get<Response<Quiz[]>>(`/quizzes/lecture/${lectureId}`),
+  checkQuizAnswer(body: any) {
+    return http.post<
+      Response<{
+        isCorrect: boolean;
+      }>
+    >("/quizzes/answer", body);
+  },
 };
 
 export default quizzesApi;

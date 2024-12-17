@@ -59,10 +59,17 @@ quizzesRouter.delete('/:quiz_id', accessTokenValidator, deleteQuizValidator, wra
 
 /**
  * Route lấy danh sách bài quiz theo chapter
- * [GET] /quizzes/:lecture_id
+ * [GET] /quizzes/chapter/:chapter_id
  */
 
 quizzesRouter.get('/chapter/:chapter_id', accessTokenValidator, wrapHandler(quizzesController.getAllQuizByChapterId))
+
+/**
+ * Route lấy danh sách bài quiz theo lecture
+ * [GET] /quizzes/:lecture_id
+ */
+
+quizzesRouter.get('/lecture/:lecture_id', accessTokenValidator, wrapHandler(quizzesController.getAllQuizByLectureId))
 
 /**
  * Route lấy chi tiết một bài quiz
@@ -70,5 +77,17 @@ quizzesRouter.get('/chapter/:chapter_id', accessTokenValidator, wrapHandler(quiz
  */
 
 quizzesRouter.get('/:quiz_id', accessTokenValidator, wrapHandler(quizzesController.getQuizById))
+
+/**
+ * Route kiểm tra đáp án
+ * [POST] /quizzes/answer
+ * body: {
+ * quiz_id: string
+ * question_id: string
+ * selected_option_id: string
+ * }
+ */
+
+quizzesRouter.post('/answer', accessTokenValidator, wrapHandler(quizzesController.checkAnswerForQuiz))
 
 export default quizzesRouter

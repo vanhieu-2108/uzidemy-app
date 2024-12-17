@@ -1,40 +1,23 @@
 "use client";
 import { useRouter } from "next/navigation";
 import React from "react";
-import coursesApi from "@/apiRequests/courses";
 
 export default async function BlogPage() {
-  const res = await coursesApi.getCourses();
   const router = useRouter();
 
   const handleCreatePost = () => {
     router.push("/manage/courses/blog/");
-  }
+  };
   const handleBlogClick = () => {
-    router.push("/blog/1"); 
+    router.push("/blog/1");
   };
 
-
   return (
-    <div className="relative max-w-6xl mx-auto p-8">
-     {/* {data.map((course) => (
-          <BlogPage isLearn key={course._id} course={course} />
-        ))} */}
-      <button
-         onClick={handleCreatePost}
-        className="absolute top-8 right-8 px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg shadow hover:bg-blue-700"
-      >
-        Đăng bài viết
-      </button>
-
+    <div className="relative max-w-6xl mx-auto">
       <h1 className="text-4xl font-bold mb-8">Bài viết nổi bật</h1>
-
       <div className="grid gap-8">
         <div className="col-span-2 space-y-8">
-          <div 
-            className="bg-white rounded-lg shadow-md overflow-hidden flex cursor-pointer"
-            onClick={handleBlogClick}
-          >
+          <div className="bg-white rounded-lg shadow-md overflow-hidden flex cursor-pointer" onClick={handleBlogClick}>
             <div className="p-4 flex-grow">
               <div className="flex items-center mb-2">
                 <img
@@ -51,8 +34,8 @@ export default async function BlogPage() {
                 Mình đã làm thế nào để hoàn thành một dự án website chỉ trong 15 ngày
               </h3>
               <p className="text-sm text-gray-700 mt-2">
-                Xin chào mọi người mình là Lý Cao Nguyên, mình đã làm một dự án website
-                front-end với hơn 100 bài học và 200 bài viết...
+                Xin chào mọi người mình là Lý Cao Nguyên, mình đã làm một dự án website front-end với hơn 100 bài học và
+                200 bài viết...
               </p>
               <div className="flex justify-between items-center mt-4">
                 <span className="text-xs font-medium text-gray-500">Front-end</span>
@@ -71,5 +54,4 @@ export default async function BlogPage() {
       </div>
     </div>
   );
-}  
-
+}

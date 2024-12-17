@@ -1,4 +1,5 @@
 import { ObjectId, WithId } from 'mongodb'
+import { EPostStatus } from '~/constants/enums'
 import { ErrorWithStatus } from '~/model/Errors'
 import { AddPostReqBody } from '~/model/requests/Post.requests'
 import Post from '~/model/schemas/Post.schema'
@@ -38,7 +39,7 @@ class PostsService {
       { _id: new ObjectId(post_id) },
       {
         $set: {
-          _destroy: true
+          status: EPostStatus.DELETED
         },
         $currentDate: {
           updated_at: true
@@ -83,7 +84,7 @@ class PostsService {
       },
       {
         $set: {
-          _destroy: !post._destroy
+          status: EPostStatus.PUBLIC
         }
       }
     )

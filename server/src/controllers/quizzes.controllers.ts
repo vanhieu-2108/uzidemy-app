@@ -25,6 +25,16 @@ class QuizzesController {
     const result = await quizzesService.getQuizById(req.params.quiz_id)
     res.json(result)
   }
+
+  async getAllQuizByLectureId(req: Request, res: Response, next: NextFunction) {
+    const result = await quizzesService.getAllQuizByLectureId(req.params.lecture_id)
+    res.json(result)
+  }
+
+  async checkAnswerForQuiz(req: Request, res: Response, next: NextFunction) {
+    const result = await quizzesService.checkAnswerForQuiz(req.body)
+    res.json(result)
+  }
 }
 
 const quizzesController = new QuizzesController()

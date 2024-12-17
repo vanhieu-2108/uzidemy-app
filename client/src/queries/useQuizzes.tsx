@@ -33,3 +33,22 @@ export const useDeleteQuizById = () => {
     mutationFn: quizzesApi.deleteQuizById,
   });
 };
+
+export const useCheckAnswerForQuiz = () => {
+  return useMutation({
+    mutationFn: quizzesApi.checkAnswerForQuiz,
+  });
+};
+
+export const useGetQuizzesByLectureId = (lectureId: string) => {
+  return useQuery({
+    queryKey: ["quizzes", lectureId],
+    queryFn: () => quizzesApi.getQuizzesByLectureId(lectureId),
+  });
+};
+
+export const useCheckQuizAnswer = () => {
+  return useMutation({
+    mutationFn: quizzesApi.checkQuizAnswer,
+  });
+};

@@ -1,5 +1,5 @@
 import { ObjectId, WithId } from 'mongodb'
-import { EPostStatus } from '~/constants/enums'
+import { EPostStatus, ERole } from '~/constants/enums'
 import { ErrorWithStatus } from '~/model/Errors'
 import { AddPostReqBody } from '~/model/requests/Post.requests'
 import Post from '~/model/schemas/Post.schema'
@@ -50,20 +50,13 @@ class PostsService {
       message: 'Xóa bài viết thành công'
     }
   }
-  async getPosts(isAll: boolean = false) {
+  async getPosts(role: string) {
     let result
-    if (isAll) {
-      result = await databaseService.posts.find().toArray()
+    if (role === ERole.ADMIN) {
+      result = await databaseService.posts.find({}).toArray()
     } else {
-      result = await databaseService.posts
-        .find({
-          _destroy: {
-            $ne: true
-          }
-        })
-        .toArray()
+      result = await databaseService.posts.find({ status: EPostStatus.PUBLIC }).toArray()
     }
-
     return {
       message: 'Lấy danh sách bài viết thành công',
       result
@@ -90,6 +83,24 @@ class PostsService {
     )
     return {
       message: 'Đổi trạng thái bài viết thành công'
+    }
+  }
+
+  async getPostsByUserId(user_id: string) {
+    const findUser = await databaseService.users.findOne({
+      _id: new ObjectId(user_id)
+    })
+    if (!findUser) {
+      throw new Error('Người dùng không tồn tại')
+    }
+    const result = await databaseService.posts
+      .find({
+        user_id: new ObjectId(user_id)
+      })
+      .toArray()
+    return {
+      message: 'Lấy danh sách bài viết theo người dùng thành công.',
+      result
     }
   }
 }

@@ -9,3 +9,5 @@ export { default as IconBookNote } from "./icon-book-type";
 export { default as IconTrash } from "./icon-trash";
 export { default as IconCheck } from "./icon-check";
 export { default as IconBox } from "./icon-box";
+export { default as IconBookOpen } from "./icon-book-open";
+export { default as IconUserGroup } from "./icon-user-group";

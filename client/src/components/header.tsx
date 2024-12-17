@@ -57,7 +57,12 @@ export default function Header() {
             <DropdownMenuContent>
               <DropdownMenuLabel>{user.fullname}</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Hồ sơ</DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={"/post/create"}>Thêm bài viết</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild>
+                <Link href={"/post/list"}>Danh sách bài viết</Link>
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={handleLogout}>Đăng xuất</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

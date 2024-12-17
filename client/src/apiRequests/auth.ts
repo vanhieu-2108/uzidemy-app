@@ -1,6 +1,6 @@
 import http from "@/lib/http";
 import { RefreshTokenBodyType, RefreshTokenResType, ResponseRegister } from "@/ResponseType/auth.type";
-import { ResponseLogin, ResponseLogout } from "@/types/auth";
+import { Account, ResponseLogin, ResponseLogout } from "@/types/auth";
 import { Response } from "@/types/res";
 
 const authApiRequest = {
@@ -29,6 +29,12 @@ const authApiRequest = {
     this.refreshTokenRequest = null;
     return result;
   },
+  updateMe: (body: any) => http.put<Response<Account>>("/users/update-me", body),
+  changePassword: (body: any) => http.put<Response<Account>>("/users/change-password", body),
+  getUsers: () => http.get<Response<Account[]>>("/users"),
+  getUserById: (id: string) => http.get<Response<Account>>(`/users/${id}`),
+  updateUserById: ({ id, body }: { id: string; body: any }) => http.put<Response<Account>>(`/users/${id}`, body),
+  deleteUserById: (id: string) => http.delete<Response<Account>>(`/users/${id}`),
 };
 
 export default authApiRequest;

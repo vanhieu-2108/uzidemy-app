@@ -1,7 +1,6 @@
 "use client";
 import { AppProviderContext } from "@/components/app-provider";
 import { IconSearch } from "@/components/icons";
-import { ModeToggle } from "@/components/mode-toggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,7 +21,6 @@ import { useRouter } from "next/navigation";
 export default function Header() {
   const { user, setUser } = useContext(AppProviderContext);
   const router = useRouter();
-
   const logoutMutation = useLogout();
 
   const handleLogout = async () => {
@@ -41,25 +39,19 @@ export default function Header() {
 
   return (
     <div className="py-3 sticky top-0 left-0 flex items-center gap-5 justify-between bg-white z-10">
-      <div className="hidden sm:flex w-[min(100%,390px)] textGray h-10 rounded-full border borderGray px-4 items-center">
-        <input type="text" placeholder="Search..." className="flex-grow pr-4" />
-        <button className="flex-shrink-0">
-          <IconSearch />
-        </button>
-      </div>
       <div className="sm:hidden">
         <Link href="/">
           <span className="text-3xl font-bold text-primary">U</span>
           <span className="text-2xl font-bold">zidemy</span>
         </Link>
       </div>
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 ml-auto">
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger>
               <Avatar className="w-10 h-10 rounded-full">
-                <AvatarImage src="https://github.com/shadcn.png" alt="User Avatar" />
-                <AvatarFallback>CN</AvatarFallback>
+                <AvatarImage src={"https://github.com/shadcn.png"} alt="User Avatar" />
+                <AvatarFallback>{user.fullname.slice(0, 3)}</AvatarFallback>
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent>

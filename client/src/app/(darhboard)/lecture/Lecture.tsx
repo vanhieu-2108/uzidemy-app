@@ -125,41 +125,7 @@ export default function Lecture() {
               <Comments id={id} />
             </TabsContent>
             <TabsContent value="quiz">
-              <QuizAnswers
-                lecture_id={seachParams?.id}
-                answers={[
-                  {
-                    question: "What is the capital of France?",
-                    options: [
-                      { option_id: "1", correct_answer: "Paris" },
-                      { option_id: "2", correct_answer: "London" },
-                      { option_id: "3", correct_answer: "Berlin" },
-                      { option_id: "4", correct_answer: "Madrid" },
-                    ],
-                    userAnswer: "1",
-                  },
-                  {
-                    question: "Which is the largest planet in the solar system?",
-                    options: [
-                      { option_id: "1", correct_answer: "Earth" },
-                      { option_id: "2", correct_answer: "Mars" },
-                      { option_id: "3", correct_answer: "Jupiter" },
-                      { option_id: "4", correct_answer: "Saturn" },
-                    ],
-                    userAnswer: "3",
-                  },
-                  {
-                    question: "Which programming language is known as the language of the web?",
-                    options: [
-                      { option_id: "1", correct_answer: "Java" },
-                      { option_id: "2", correct_answer: "JavaScript" },
-                      { option_id: "3", correct_answer: "Python" },
-                      { option_id: "4", correct_answer: "C++" },
-                    ],
-                    userAnswer: "2",
-                  },
-                ]}
-              />
+              <QuizAnswers lecture_id={seachParams?.id} />
             </TabsContent>
           </Tabs>
         </div>

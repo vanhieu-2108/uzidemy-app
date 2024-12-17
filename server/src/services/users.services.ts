@@ -3,7 +3,7 @@ import { ERole } from '~/constants/enums'
 import { ErrorWithStatus } from '~/model/Errors'
 import { ChangePasswordReqBody, RegisterReqBody, UpdateMeReqBody } from '~/model/requests/User.requests'
 import RefreshToken from '~/model/schemas/RefreshToken.schema'
-import User, { EVerifyUser, IUser } from '~/model/schemas/User.schema'
+import User, { EStatusUser, EVerifyUser, IUser } from '~/model/schemas/User.schema'
 import databaseService from '~/services/database.services'
 import envConfig from '~/utils/config'
 import { sendEmailVerfiy, sendForgotPassword } from '~/utils/send-email'
@@ -66,7 +66,8 @@ class UsersServices {
       {
         $set: {
           fullname: data.fullname,
-          avatar: data.avatar
+          avatar: data.avatar,
+          email: data.email
         },
         $currentDate: {
           updated_at: true
@@ -91,7 +92,6 @@ class UsersServices {
       { _id: new ObjectId(user_id) },
       {
         projection: {
-          password: 0,
           email_verify_token: 0
         }
       }
@@ -287,6 +287,66 @@ class UsersServices {
       })
     }
     return user
+  }
+
+  async updateUserById(user_id: string, data: UpdateMeReqBody) {
+    const findUser = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+    if (!findUser) {
+      throw new ErrorWithStatus({
+        message: 'Người dùng không tồn tại',
+        status: 404
+      })
+    }
+    const result = await databaseService.users.findOneAndUpdate(
+      {
+        _id: new ObjectId(user_id)
+      },
+      {
+        $set: {
+          fullname: data.fullname,
+          avatar: data.avatar,
+          email: data.email,
+          status: data.status
+        },
+        $currentDate: {
+          updated_at: true
+        }
+      },
+      {
+        projection: {
+          password: 0,
+          email_verify_token: 0
+        },
+        returnDocument: 'after'
+      }
+    )
+    return {
+      message: 'Cập nhật thông tin thành công',
+      result
+    }
+  }
+
+  async deleteUserById(user_id: string) {
+    const findUser = await databaseService.users.findOne({ _id: new ObjectId(user_id) })
+    if (!findUser) {
+      throw new ErrorWithStatus({
+        message: 'Người dùng không tồn tại',
+        status: 404
+      })
+    }
+    await databaseService.users.updateOne(
+      {
+        _id: new ObjectId(user_id)
+      },
+      {
+        $set: {
+          status: EStatusUser.DELETED
+        }
+      }
+    )
+    return {
+      message: 'Xóa người dùng thành công'
+    }
   }
 }
 const usersServices = new UsersServices()

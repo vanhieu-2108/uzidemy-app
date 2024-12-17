@@ -68,7 +68,7 @@ usersRouter.post('/login', loginValidator, wrapHandler(usersController.login))
 usersRouter.post('/logout', refreshTokenValidator, wrapHandler(usersController.logout))
 /**
  * Route cập nhật thông tin người dùng
- * [POST]: /users/update-me
+ * [PUT]: /users/update-me
  * Private route: Đây là route khi người dùng đã đăng nhập thì mới có thể truy cập
  * headers: {
  *  Authorization: `Bearer <accessToken>`
@@ -78,10 +78,10 @@ usersRouter.post('/logout', refreshTokenValidator, wrapHandler(usersController.l
  *  password: string
  * }
  */
-usersRouter.post('/update-me', accessTokenValidator, updateMeValidator, wrapHandler(usersController.updateMe))
+usersRouter.put('/update-me', accessTokenValidator, updateMeValidator, wrapHandler(usersController.updateMe))
 /**
  * Route đổi mật khẩu
- * [POST]: /users/change-password
+ * [PUT]: /users/change-password
  * Private route: Đây là route khi người dùng đã đăng nhập thì mới có thể truy cập
  * headers: {
  * Authorization: `Bearer <accessToken>`
@@ -92,7 +92,7 @@ usersRouter.post('/update-me', accessTokenValidator, updateMeValidator, wrapHand
  * confirm_new_password: string
  * }
  */
-usersRouter.post(
+usersRouter.put(
   '/change-password',
   accessTokenValidator,
   changePasswordValidator,
@@ -170,5 +170,33 @@ usersRouter.get('/:user_id', accessTokenValidator, isIdSchemaMongoDB, wrapHandle
  */
 
 usersRouter.post('/refresh-token', refreshTokenValidator, wrapHandler(usersController.refreshToken))
+
+/**
+ * Route cập nhật người dùng theo id
+ * [PUT]: /users/:user_id
+ * Private route: Đây là route chỉ admin mới có thể truy cập
+ */
+
+usersRouter.put(
+  '/:user_id',
+  accessTokenValidator,
+  isAdminValidator,
+  isIdSchemaMongoDB,
+  updateMeValidator,
+  wrapHandler(usersController.updateUserById)
+)
+
+/**
+ * Route xóa người dùng theo id
+ * [DELETE]: /users/:user_id
+ */
+
+usersRouter.delete(
+  '/:user_id',
+  accessTokenValidator,
+  isAdminValidator,
+  isIdSchemaMongoDB,
+  wrapHandler(usersController.deleteUserById)
+)
 
 export default usersRouter

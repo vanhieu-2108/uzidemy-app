@@ -9,7 +9,6 @@ export default function Sidebar() {
   const { user } = useAppProvider();
   const token = getAccessTokenFromLocalStorage();
   const checkAdmin = token ? Boolean(isAdmin(token)) : false;
-  console.log("user", user);
   return (
     <>
       <div className="p-5 border borderGray h-screen hidden lg:block sticky top-0 left-0">

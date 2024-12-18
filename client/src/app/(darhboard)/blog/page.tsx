@@ -8,6 +8,7 @@ import React from "react";
 export default function BlogPage() {
   const { data } = useGetPosts();
   const posts = data?.payload.result;
+
   return (
     <div className="py-12">
       <h1 className="text-4xl font-bold mb-8">Danh sách bài viết</h1>

@@ -19,8 +19,12 @@ import { Progress } from "@/components/ui/progress";
 import CoursesContent from "@/components/courses-content/CoursesContent";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import QuizAnswers from "@/components/quiz-answers/QuizAnswers";
+import { useGetUserById } from "@/queries/useAccount";
+import { useAppProvider } from "@/components/app-provider";
 
 export default function Lecture() {
+  const { user } = useAppProvider();
+  const { data: userData } = useGetUserById(user?._id as string);
   const seachParams = useGetSearchParams();
   const playerRef = useRef<MediaPlayerInstance>(null);
   const { course_id, id } = useGetSearchParams();
@@ -33,6 +37,12 @@ export default function Lecture() {
   const { data: progressData, refetch } = useGetProgressByCourseId(dataLecture?.course_id as string, {
     enabled: !!dataLecture?.course_id,
   });
+  const courseId = dataLecture?.course_id;
+  const courses = userData?.payload.result.courses;
+
+  if (courseId && !courses?.includes(courseId)) {
+    router.push(`/`);
+  }
 
   const watchedLectures = (progressData as any)?.payload.data.watchedLectures.map((item: any) => item.lecture_id);
 

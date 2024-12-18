@@ -110,6 +110,7 @@ class PostsService {
               content: 1,
               image: 1,
               author: 1,
+              status: 1,
               user: {
                 avatar: 1
               }

@@ -35,7 +35,13 @@ export default function BlogPage() {
                     <h3 className="font-semibold text-xl mt-5">{post.title}</h3>
                   </div>
                   <div className="w-1/5">
-                    <Image src={post.image} alt={post.title} width={100} height={100} className="w-full h-full" />
+                    <Image
+                      src={post.image}
+                      alt={post.title}
+                      width={100}
+                      height={100}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 </div>
               </div>

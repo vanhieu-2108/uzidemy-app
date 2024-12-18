@@ -52,7 +52,6 @@ class PostsService {
   }
   async getPosts(role: string) {
     let result
-
     if (role === ERole.ADMIN) {
       result = await databaseService.posts
         .aggregate([
@@ -66,8 +65,7 @@ class PostsService {
           },
           {
             $unwind: {
-              path: '$user', // Giải nén mảng user
-              preserveNullAndEmptyArrays: true // Giữ bài viết dù không có user khớp
+              path: '$user' // Giải nén mảng user
             }
           },
           {
@@ -77,6 +75,7 @@ class PostsService {
               image: 1,
               author: 1,
               created_at: 1,
+              status: 1,
               user: {
                 avatar: 1
               }
@@ -102,8 +101,7 @@ class PostsService {
           },
           {
             $unwind: {
-              path: '$user',
-              preserveNullAndEmptyArrays: true
+              path: '$user'
             }
           },
           {

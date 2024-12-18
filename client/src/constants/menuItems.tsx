@@ -47,7 +47,7 @@ export const menuItems = [
     isAdmin: true,
   },
   {
-    url: "/manage/",
+    url: "/manage/posts",
     title: "Quản lý bài viết",
     isPublic: false,
     icon: <IconBookOpen className="size-5" />,
